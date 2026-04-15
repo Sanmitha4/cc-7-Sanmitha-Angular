@@ -1,20 +1,22 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { Home } from './components/home/home';
+
+import { Home } from '@components/home/home';
+import {Component} from '@angular/core';
+
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet,Home],
-  //templateUrl: './app.html',
-  template:`<h1>Hello Angular</h1>`,
-  styleUrl: './app.css'
+  imports: [Home],
+  template: `
+    <main>
+      <header class="brand-name">
+        <img class="brand-logo" src="/public/logo.svg" alt="logo" aria-hidden="true" />
+      </header>
+      <section class="content">
+        <app-home />
+      </section>
+    </main>
+  `,
+  styleUrls: ['./app.css'],
 })
 export class App {
-  //protected readonly title = signal('property-app');
-  protected readonly title=("property-qpp");
-
-  //setTimeout ,event listener is fired or a promise got resolved /rejected,network call
-  // ngOnInit(){
-  //   console.log('App component was instantiated!');
-  //   this.title='propert app reloaded'
-  // }
+  title = 'homes';
 }

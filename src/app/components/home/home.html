@@ -1,1 +1,16 @@
-<p>home works!</p>
+<section>
+  <form>
+    <input type="text" placeholder="Filter by city" />
+    <button class="primary" type="button">Search</button>
+  </form>
+</section>
+<section class="results">
+  @for (housingLocation of housingLocationList; track housingLocation.id) {
+    <app-housing-location
+      [housingLocation]="housingLocation"
+      (onLocationClick)="handleLocationClick($event)"
+    />
+  } @empty {
+    <h2>There are no items to display</h2>
+  }
+</section>
