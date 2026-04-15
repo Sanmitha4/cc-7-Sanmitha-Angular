@@ -10,7 +10,7 @@ export class HousingLocation {
   housingLocation = input.required<HousingLocationInfo>();
   onLocationClick =output<HousingLocationInfo>();
 
-  handleClick(){
+  handleButtonClick(event:MouseEvent){
     console.log(`${this.housingLocation().name} is clicked`);
     this.onLocationClick.emit(this.housingLocation());
   }

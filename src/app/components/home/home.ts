@@ -112,8 +112,22 @@ export class Home {
       laundry: true,
     },
   ];
-// housingLocationList: any;
-handleLocationClick(location: HousingLocationInfo){
-  console.log(`${location.name} was clicked`);
+  handleLocationClick(location: HousingLocationInfo) {
+  // 1. Find the index of the item that was clicked
+  const index = this.housingLocationList.findIndex(item => item.id === location.id);
+
+  if (index !== -1) {
+    // 2. Remove the item from its current position
+    const [clickedItem] = this.housingLocationList.splice(index, 1);
+
+    // 3. Add it to the beginning of the list
+    this.housingLocationList.unshift(clickedItem);
+    
+    console.log(`${clickedItem.name} moved to top`);
+  }
 }
+// // housingLocationList: any;
+// handleLocationClick(location: HousingLocationInfo){
+//   console.log(`${location.name} was clicked`);
+// }
 }

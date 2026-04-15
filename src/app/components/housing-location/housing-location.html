@@ -1,5 +1,5 @@
 
-<button class="container" (click)="handleClick()">
+<!-- <button class="container" (click)="handleClick()">
   <section class="listing">
     <img
       class="listing-photo"
@@ -10,4 +10,36 @@
     <h2 class="listing-heading">{{ housingLocation().name }}</h2>
     <p class="listing-location">{{ housingLocation().city }}, {{ housingLocation().state }}</p>
   </section>
-</button>
+</button> -->
+
+<!-- <section class="listing">
+  <img class="listing-photo" [src]="housingLocation().photo" alt="Photo of {{housingLocation.name}}">
+  
+  @if (housingLocation.wifi) {
+    <span class="wifi-badge">📶 WiFi Available</span>
+  }
+
+  <h2 class="listing-heading">{{ housingLocation.name }}</h2>
+  <p class="listing-location">{{ housingLocation.city }}, {{ housingLocation.state }}</p>
+  
+  <button class="primary" type="button" (click)="handleButtonClick()">
+    Learn More
+  </button>
+</section> -->
+
+
+<section class="listing">
+  <img class="listing-photo" [src]="housingLocation().photo" alt="Photo of {{housingLocation().name}}">
+
+  @if (housingLocation().wifi) {
+    <span class="wifi-badge">📶</span>
+  } @else {
+    <span class="no-wifi"></span>
+  }
+
+  <h2 class="listing-heading">{{ housingLocation().name }}</h2>
+  <p class="listing-location">{{ housingLocation().city }}, {{ housingLocation().state }}</p>
+  
+  <button class="primary" type="button" (click)="handleButtonClick($event)">Details
+  </button>
+</section>
