@@ -1,8 +1,7 @@
-<div class="counter">
-  <button (click)="decrement()">-</button>
-  <span>{{ count() }}</span> <button (click)="increment()">+</button>
+<div class="counter-container">
+  <button type="button" (click)="decrement()">-</button>
+  
+  <span class="count-display">{{ count() }}</span>
+  
+  <button type="button" (click)="increment()">+</button>
 </div>
-
-<button class="primary" type="button" (click)="handleButtonClick()">
-  Details
-</button>

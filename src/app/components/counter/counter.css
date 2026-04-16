@@ -20,3 +20,7 @@ button {
   cursor: pointer;
 }
 
+:host {
+  display: block;
+  margin: 10px 0;
+}
