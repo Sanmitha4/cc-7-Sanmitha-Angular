@@ -21,8 +21,15 @@
     <button class="primary" type="button">Search</button>
   </form>
 </section>
+<section>
+  <label> EditMode
+    <input type="checkbox" (select)="handleCheckBox($event)"/>
+  </label>
+  
+
+</section>
 <section class="results">
-  @for (housingLocation of  locationService.getAllLocation(); track housingLocation.id) {
+  @for (housingLocation of  locationService.getAllLocations(); track housingLocation.id) {
     <app-housing-location
       [housingLocation]="housingLocation"
       (onLocationClick)="handleLocationClick($event)"

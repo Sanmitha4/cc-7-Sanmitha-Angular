@@ -6,7 +6,6 @@ export const BASE_URL=new InjectionToken<string>('base url',{
   factory:()=>'https://angular.dev/assets/images/tutorials/common',
 
 });
-export 
 
 
 @Injectable({
@@ -123,5 +122,11 @@ export class LocationService {
         laundry: true,
       },
     ];
+    getAllLocations(){
+      return this.housingLocationList;
+    }
+    getLocationForId(id: number): HousingLocationInfo | undefined {
+      return this.housingLocationList.find(loc => loc.id === id);
+    }
 
 }
