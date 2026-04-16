@@ -2,15 +2,14 @@ import {Component} from '@angular/core';
 import { HousingLocation} from '@components/housing-location/housing-location';
 import { HousingLocationInfo } from '../../models/housing-location-info';
 import { Counter } from '@components/counter/counter';
-//import {LocationService} from '../../services/location-service'
-import { MockLocationService } from '../../services/location-service';
+import {LocationService} from '../../services/location-service'
 
 @Component({
   selector: 'app-home',
   imports: [HousingLocation,Counter],
   templateUrl: './home.html',
   styleUrl: './home.css',
-  providers:[{provide:LocationService,useClass:LocationService}],
+  providers:[{LocationService}],
 })
 export class Home {
   locationService:LocationService=inject(LocationService)
@@ -22,7 +21,8 @@ export class Home {
     const otherItems = this.housingLocationList.filter(item => item.id !== location.id);
     this.housingLocationList = [location, ...otherItems];
     console.log(`${location.name} moved to top `);
-  }
+  // }
+}
 }
   // handleLocationClick(location: HousingLocationInfo) {
   // const index = this.housingLocationList.findIndex(item => item.id === location.id);
