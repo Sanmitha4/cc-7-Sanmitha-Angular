@@ -128,5 +128,8 @@ export class LocationService {
     getLocationForId(id: number): HousingLocationInfo | undefined {
       return this.housingLocationList.find(loc => loc.id === id);
     }
+    getTotalCount():number{
+      return this.housingLocationList.length;
+    }
 
 }

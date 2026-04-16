@@ -23,7 +23,12 @@ export class LocationDetails {
     console.log('The id of the location:',this.housingLocationId);
 
     this.location=this.locationService.getLocationForId(this.housingLocationId)
-
-
   }
+  ngOnDestroy() {
+    console.log('LocationDetails is destroyed');
+    LocationDetails.count -= 1;
+  }
+
+  static count = 0;
 }
+
