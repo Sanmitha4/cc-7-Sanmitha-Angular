@@ -1,16 +1,24 @@
-import { Injectable } from '@angular/core';
+import { Injectable,InjectionToken } from '@angular/core';
 import { HousingLocationInfo } from '../models/housing-location-info';
+
+export const BASE_URL=new InjectionToken<string>('base url',{
+  providedIn:'root',
+  factory:()=>'https://angular.dev/assets/images/tutorials/common',
+
+});
+export 
+
 
 @Injectable({
   providedIn: 'root',
 })
-export class MockLocationService {
+export class LocationService {
   static numberOfInstances=0;
 
-  constructor{
-    MockLocationService.numberOfInstances+=1;
+  constructor(){
+   LocationService.numberOfInstances+=1;
     console.log("Number of instances",
-    MockLocationService.numberOfInstances)
+    LocationService.numberOfInstances)
   }
   private readonly baseUrl = 'https://angular.dev/assets/images/tutorials/common';
   private readonly housingLocationList: HousingLocationInfo[] = [
