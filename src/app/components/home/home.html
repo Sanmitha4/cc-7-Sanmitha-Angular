@@ -20,22 +20,17 @@
     <input type="text" placeholder="Filter by city" />
     <button class="primary" type="button">Search</button>
   </form>
-</section>
-<section>
-  <label> EditMode
-    <input type="checkbox" (select)="handleCheckBox($event)"/>
+  <label>
+    Edit mode:
+    <input type="checkbox" (change)="handleCheckbox($event)" checked/>
   </label>
-  
-
 </section>
 <section class="results">
-  @for (housingLocation of  locationService.getAllLocations(); track housingLocation.id) {
-    <app-housing-location
-      [housingLocation]="housingLocation"
-      (onLocationClick)="handleLocationClick($event)"
-    />
+  @for (housingLocation of locationService.getAllLocation(); track housingLocation.id) {
+    <app-housing-location 
+      [housingLocation]="housingLocation" 
+      (onLocationClick)="handleLocationClick($event)" />
   } @empty {
-    <h2>There are no items to display</h2>
+    <p>No locations found.</p>
   }
 </section>
-

@@ -5,6 +5,10 @@
         alt="Exterior photo of {{ location?.name }}"
         crossorigin
       />
+      <div>
+        <button (click)="handlePrev(location)"><</button>
+        <button (click)="handleNext(location)">></button>
+      </div>
       <section class="listing-description">
         <h2 class="listing-heading">{{ location?.name }}</h2>
         <p class="listing-location">{{ location?.city }}, {{ location?.state }}</p>

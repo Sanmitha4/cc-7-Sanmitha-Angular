@@ -1,13 +1,17 @@
-template: `
-...
-    <main>
-      <header class="brand-name">
-        <a class ="brand-link" routerLink="/">
-          <img class="brand-logo" src="/public/logo.svg" alt="logo" aria-hidden="true" />
-        </a>
-      </header>
-      <section class="content">
-        <router-outlet/>
-      </section>
-    </main>
-  `,
+<main>
+  <a [routerLink]="['/']">
+  <header class="brand-name">
+    <img class="brand-logo" src="public/logo.svg" alt="logo" aria-hidden="true" />
+  </header>
+  </a>
+  <section class="content">
+    <router-outlet/>
+  </section>
+</main>
+<footer class="bottom-bar">
+  <nav class="nav-menu">
+    <button class="nav-item">Home</button>
+    <button class="nav-item">Search</button>
+    <button class="nav-item">Profile</button>
+  </nav>
+</footer>

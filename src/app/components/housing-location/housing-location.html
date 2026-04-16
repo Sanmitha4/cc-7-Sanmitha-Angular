@@ -27,7 +27,7 @@
   </button>
 </section> -->
 
-<section class="listing">
+<!-- <section class="listing">
   <img class="listing-photo" [src]="housingLocation().photo" alt="Photo of {{housingLocation().name}}">
 
   @if (housingLocation().wifi) {
@@ -43,4 +43,20 @@
   
   <button class="primary" type="button" (click)="handleButtonClick($event)">Details
   </button>
-</section>
+<!-- </section> --> -->
+
+<button class="container" (click)="handleClick($event)">
+  <section class="listing">
+    <img class="listing-photo" [src]="housingLocation().photo" alt="Photo of {{housingLocation().name}}">
+    <h2 class="listing-heading">{{ housingLocation().name }}</h2>
+    <div>
+      <p class="listing-location">{{ housingLocation().city }}, {{ housingLocation().state }}</p>
+      @if (housingLocation().wifi) {
+    <span class="wifi-badge">📶</span>
+  } @else {
+    <span class="no-wifi"></span>
+  }
+    </div>
+    <!-- <p>{{ locationService.getAllLocation().length  }}</p> -->
+  </section>
+</button>
