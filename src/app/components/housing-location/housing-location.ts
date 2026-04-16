@@ -6,7 +6,7 @@ import { BASE_URL, LocationService } from '../../services/location-service';
   selector: 'app-housing-location',
   templateUrl: './housing-location.html',
   styleUrls: ['./housing-location.css'],
-  providers:[{provide:BASE_URL,useClass:'blah blah'}],
+  providers:[{provide:BASE_URL,useExisting:'blah blah'}],
   
 })
 export class HousingLocation {
