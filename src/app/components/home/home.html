@@ -3,10 +3,17 @@
     <input type="text" placeholder="Filter by city" />
     <button class="primary" type="button">Search</button>
   </form>
-  <label>
-    Edit mode:
-    <input type="checkbox" (change)="handleCheckbox($event)" />
-  </label>
+  <div class="controls">
+    <label>
+      Edit mode:
+      <input type="checkbox" (change)="handleCheckbox($event)" />
+    </label>
+    @if (mode() === 'edit' && hasSelection()) {
+      <button type="button" class="delete-btn" (click)="deleteSelected()">
+        Delete Selected ({{ selectionCount() }})
+      </button>
+    }
+  </div>
 </section>
 
 <section class="results">

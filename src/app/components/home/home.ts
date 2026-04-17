@@ -55,6 +55,16 @@ export class Home {
     // BAD
     //this.mode.set(this.mode() === "normal" ? 'edit' : "normal")
   }
+  deleteSelected() {
+    if (confirm(`Are you sure you want to delete ${this.selectionCount()} items?`)) {
+      this.locationService.deleteLocations(this.selectedIds());
+      this.selectedIds.set(); 
+    }
+    // if (confirm(`Delete ${this.selectionCount()} selected items?`)) {
+    //   this.locationService.deleteLocations(this.selectedIds());
+    //         this.selectedIds.set(new Set());
+    // }
+  }
   //ngOnInit() {
 //     console.log("home instanciated")
 //   }

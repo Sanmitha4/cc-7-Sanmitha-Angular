@@ -20,7 +20,7 @@ export class LocationService {
 
   private readonly baseUrl = inject(BASE_URL);
 
-  private readonly housingLocationList: HousingLocationInfo[] = [
+  private  housingLocationList: HousingLocationInfo[] = [
     {
       id: 0,
       name: 'Acme Fresh Start Housing',
@@ -130,4 +130,7 @@ export class LocationService {
   getLocationForId(id: number): HousingLocationInfo | undefined {
     return this.housingLocationList.find((location) => location.id === id);
   }
+  deleteLocations(ids: Set<number>) {
+    this.housingLocationList= this.housingLocationList.filter(loc => !ids.has(loc.id));
+}
 }

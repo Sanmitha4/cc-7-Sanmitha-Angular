@@ -34,3 +34,22 @@ button {
       grid-template-columns: 1fr;
   }    
 }
+
+.controls {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.delete-btn {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.delete-btn:hover {
+  background-color: #cc0000;
+}
