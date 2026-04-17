@@ -1,4 +1,4 @@
-<!-- <section>
+<!-- <!-- <section>
   <form>
     <input type="text" placeholder="Filter by city" />
     <button class="primary" type="button">Search</button>
@@ -29,7 +29,34 @@
   @for (housingLocation of locationService.getAllLocation(); track housingLocation.id) {
     <app-housing-location 
       [housingLocation]="housingLocation" 
+      [mode]="mode()"
+      [isSelected]="isSelected(housingLocation.id)"
       (onLocationClick)="handleLocationClick($event)" />
+  } @empty {
+    <p>No locations found.</p>
+  }
+</section> -->
+
+
+<section>
+  <form>
+    <input type="text" placeholder="Filter by city" />
+    <button class="primary" type="button">Search</button>
+  </form>
+  <label>
+    Edit mode:
+    <input type="checkbox" (change)="handleCheckbox($event)" />
+  </label>
+</section>
+
+<section class="results">
+  @for (housingLocation of locationService.getAllLocation(); track housingLocation.id) {
+    <app-housing-location
+      [housingLocation]="housingLocation"
+      [mode]="mode()"
+      [isSelected]="isSelected(housingLocation.id)"
+      (onLocationClick)="handleLocationClick($event)"
+    />
   } @empty {
     <p>No locations found.</p>
   }

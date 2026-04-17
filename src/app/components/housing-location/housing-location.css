@@ -1,4 +1,4 @@
-.listing {
+/* .listing {
   background: var(--accent-color);
   border-radius: 30px;
   padding-bottom: 30px;
@@ -40,11 +40,17 @@ section.listing a::after {
   transition:
     transform 0.2s ease-in-out;
     box-shadow: 0.15s ease;
+    outline: 0.15s ease;
   border-radius:30px;
 }
 .container:active {
   transform: scale(0.97);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+.container.selected {
+  outline: 3px solid var(--primary-color);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 6px rgba(96, 93, 200, 0.15);
 }
 .listing {
   position: relative; /* Context for absolute positioning */
@@ -66,12 +72,82 @@ section.listing a::after {
   box-shadow: 0 2px 4px rgba(0,0,0,0.2);
   z-index: 1;
 }
-.wifi-badge {
+/* .wifi-badge {
   color: green;
   font-weight: bold;
-}
+} */
 
 .no-wifi {
   color: gray;
   font-style: italic;
-} 
+}  */
+
+
+
+
+
+
+
+
+
+.listing {
+  background: var(--accent-color);
+  border-radius: 30px;
+  padding-bottom: 30px;
+  position: relative;
+}
+.listing-heading {
+  color: var(--primary-color);
+  padding: 10px 20px 0 20px;
+}
+.listing-photo {
+  height: 250px;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 30px 30px 0 0;
+}
+.listing-location {
+  padding: 10px 20px 20px 20px;
+  vertical-align: middle;
+}
+.listing-location::before {
+  content: url('/public/location-pin.svg') / '';
+}
+
+.container {
+  display: inline-block;
+  width: 100%;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 30px;
+  transition: transform 0.2s ease-in-out, box-shadow 0.15s ease, outline 0.15s ease;
+  /* Always reserve space for outline so layout doesn't shift */
+  outline: 3px solid transparent;
+  outline-offset: 3px;
+}
+.container:active {
+  transform: scale(0.97);
+}
+
+/* Selected: clear purple border + soft glow */
+.container.selected {
+  outline: 3px solid var(--primary-color);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px rgba(96, 93, 200, 0.2);
+}
+
+.wifi-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: rgba(255, 255, 255, 0.9);
+  color: green;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
