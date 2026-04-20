@@ -1,4 +1,4 @@
-import { Component, inject, signal ,computed} from '@angular/core';
+import { Component, inject, signal, computed } from '@angular/core';
 import { HousingLocation } from '../housing-location/housing-location';
 import { HousingLocationInfo } from '../../models/housing-location-info';
 import { LocationService } from '../../services/location-service';
@@ -17,18 +17,13 @@ export class Home {
 
   mode = signal<'normal' | 'edit'>('normal');
   selectedIds = signal<Set<number>>(new Set());
-
   selectionCount = computed(() => this.selectedIds().size);
-  hasSelection = computed(() => this.selectedIds().size > 0);
-
-  
-
 
   handleLocationClick(housingLocationInfo: HousingLocationInfo) {
     if (this.mode() === 'normal') {
       this.router.navigate(['details', housingLocationInfo.id]);
     } else {
-      this.selectedIds.update(prev => {
+      this.selectedIds.update((prev) => {
         const next = new Set(prev);
         if (next.has(housingLocationInfo.id)) {
           next.delete(housingLocationInfo.id);
@@ -55,21 +50,29 @@ export class Home {
     // BAD
     //this.mode.set(this.mode() === "normal" ? 'edit' : "normal")
   }
+
   deleteSelected() {
-    if (confirm(`Are you sure you want to delete ${this.selectionCount()} items?`)) {
+    const count = this.selectionCount();
+    if (confirm(`Are you sure you want to delete ${count} items?`)) {
       this.locationService.deleteLocations(this.selectedIds());
-      this.selectedIds.set(); 
+      this.selectedIds.set(new Set());
     }
-    // if (confirm(`Delete ${this.selectionCount()} selected items?`)) {
-    //   this.locationService.deleteLocations(this.selectedIds());
-    //         this.selectedIds.set(new Set());
-    // }
   }
-  //ngOnInit() {
+
+  restoreSelected() {
+    this.locationService.restoreLastAction();
+  }
+  canRestore(): boolean {
+    return this.locationService.canRestore();
+  }
+}
+
+
+
+//ngOnInit() {
 //     console.log("home instanciated")
 //   }
 
 //   ngOnDestroy() {
 //     console.log("destro")
 //   }
-}

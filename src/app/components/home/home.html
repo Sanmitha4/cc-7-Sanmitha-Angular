@@ -5,13 +5,21 @@
   </form>
   <div class="controls">
     <label>
-      Edit mode:
+      Select Mode:
       <input type="checkbox" (change)="handleCheckbox($event)" />
+      @if (mode() === 'edit') {
+        <span>Edit Mode</span>
+      } @else {
+        <span>Normal Mode</span>
+      }
     </label>
-    @if (mode() === 'edit' && hasSelection()) {
+    @if (mode() === 'edit') {
       <button type="button" class="delete-btn" (click)="deleteSelected()">
         Delete Selected ({{ selectionCount() }})
       </button>
+    }
+    @if (canRestore()) {
+      <button type="button" class="restore-btn" (click)="restoreSelected()">Undo / Restore</button>
     }
   </div>
 </section>

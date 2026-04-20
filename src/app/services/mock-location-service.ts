@@ -5,12 +5,11 @@ import { HousingLocationInfo } from '../models/housing-location-info';
   providedIn: 'root',
 })
 export class MockLocationService {
-
   static numberOfInstances = 0;
 
   constructor() {
     MockLocationService.numberOfInstances += 1;
-    console.log("Number of instances of ", MockLocationService.numberOfInstances)
+    console.log('Number of instances of ', MockLocationService.numberOfInstances);
   }
 
   readonly baseUrl = 'https://angular.dev/assets/images/tutorials/common';
@@ -97,7 +96,6 @@ export class MockLocationService {
       laundry: true,
     },
   ];
-
 
   getAllLocation() {
     return this.housingLocationList;

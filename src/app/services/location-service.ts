@@ -9,7 +9,6 @@ export const BASE_URL = new InjectionToken<string>('base url', {
 @Injectable({
   providedIn: 'root',
 })
-
 export class LocationService {
   static numberOfInstances = 0;
 
@@ -20,7 +19,7 @@ export class LocationService {
 
   private readonly baseUrl = inject(BASE_URL);
 
-  private  housingLocationList: HousingLocationInfo[] = [
+  private housingLocationList: HousingLocationInfo[] = [
     {
       id: 0,
       name: 'Acme Fresh Start Housing',
@@ -122,15 +121,35 @@ export class LocationService {
       laundry: true,
     },
   ];
-
   getAllLocation() {
     return this.housingLocationList;
   }
-
   getLocationForId(id: number): HousingLocationInfo | undefined {
     return this.housingLocationList.find((location) => location.id === id);
   }
+
+  private historyStack: HousingLocationInfo[][] = [];
+
+  private calculateFilteredList(
+    list: HousingLocationInfo[],
+    ids: Set<number>,
+  ): HousingLocationInfo[] {
+    return list.filter((loc) => !ids.has(loc.id));
+  }
   deleteLocations(ids: Set<number>) {
-    this.housingLocationList= this.housingLocationList.filter(loc => !ids.has(loc.id));
+    this.historyStack.push([...this.housingLocationList]);
+
+    this.housingLocationList = this.calculateFilteredList(this.housingLocationList, ids);
+  }
+  restoreLastAction() {
+    if (this.historyStack.length === 0) return;
+    const previousState = this.historyStack.pop();
+    if (previousState) {
+      this.housingLocationList = previousState;
+    }
+  }
+  canRestore(): boolean {
+    return this.historyStack.length > 0;
+  }
 }
-}
+
