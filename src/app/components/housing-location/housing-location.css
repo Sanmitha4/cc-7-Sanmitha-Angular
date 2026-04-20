@@ -94,6 +94,6 @@ section.listing a::after {
 }
 
 .no-wifi {
-  color: gray;
+  color: rgb(28, 10, 224);
   font-style: italic;
 }

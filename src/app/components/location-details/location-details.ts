@@ -95,7 +95,6 @@ import { HousingLocationInfo } from '../../models/housing-location-info';
   templateUrl: './location-details.html',
   styleUrl: './location-details.css',
 })
-
 export class LocationDetails {
   route: ActivatedRoute = inject(ActivatedRoute);
   router = inject(Router);
@@ -105,10 +104,10 @@ export class LocationDetails {
   housingLocationId = signal<number>(-1);
 
   isFirst = computed(() => this.housingLocationId() === 0);
-  
+
   isLast = computed(() => {
     const total = this.locationService.getAllLocation().length;
-    return this.housingLocationId() === (total - 1);
+    return this.housingLocationId() === total - 1;
   });
 
   ngOnInit() {
@@ -117,11 +116,10 @@ export class LocationDetails {
       this.location = this.locationService.getLocationForId(this.housingLocationId());
     });
   }
-   ngAfterViewInit() {
+  ngAfterViewInit() {
     console.log('Component is now rendered');
   }
-  
-  
+
   handlePrev() {
     if (!this.isFirst()) {
       this.router.navigate(['details', this.housingLocationId() - 1]);
@@ -134,6 +132,5 @@ export class LocationDetails {
     }
   }
   //console.log(housingLocationInfo);
-  static count=0;
+  static count = 0;
 }
-
