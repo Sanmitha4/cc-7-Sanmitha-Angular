@@ -4,35 +4,42 @@
     <button class="primary" type="button">Search</button>
   </form>
   <div class="controls">
-    <label>
-      Select Mode:
-      <input type="checkbox" (change)="handleCheckbox($event)" />
-      @if (mode() === 'edit') {
-        <span>Edit Mode</span>
-      } @else {
-        <span>Normal Mode</span>
-      }
-    </label>
+    <div>
+      <label>
+        Select Mode:
+        <input type="checkbox" (change)="handleCheckbox($event)" />
+        {{ mode() === 'edit' ? 'Edit Mode' : 'Normal Mode' }}
+      </label>
+    </div>
+
     @if (mode() === 'edit') {
-      <button type="button" class="delete-btn" (click)="deleteSelected()">
-        Delete Selected ({{ selectionCount() }})
-      </button>
-    }
-    @if (canRestore()) {
-      <button type="button" class="restore-btn" (click)="restoreSelected()">Undo / Restore</button>
+      <div class="action-toggle-group">
+        <button
+          type="button"
+          class="delete-btn"
+          [disabled]="selectionCount() === 0"
+          (click)="deleteSelected()"
+        >
+          Delete ({{ selectionCount() }})
+        </button>
+
+        @if (canRestore()) {
+          <button type="button" class="restore-btn" (click)="restoreSelected()">Restore</button>
+        }
+      </div>
     }
   </div>
-</section>
 
-<section class="results">
-  @for (housingLocation of locationService.getAllLocation(); track housingLocation.id) {
-    <app-housing-location
-      [housingLocation]="housingLocation"
-      [mode]="mode()"
-      [isSelected]="isSelected(housingLocation.id)"
-      (onLocationClick)="handleLocationClick($event)"
-    />
-  } @empty {
-    <p>No locations found.</p>
-  }
+  <section class="results">
+    @for (housingLocation of locationService.getAllLocation(); track housingLocation.id) {
+      <app-housing-location
+        [housingLocation]="housingLocation"
+        [mode]="mode()"
+        [isSelected]="isSelected(housingLocation.id)"
+        (onLocationClick)="handleLocationClick($event)"
+      />
+    } @empty {
+      <p>No locations found.</p>
+    }
+  </section>
 </section>

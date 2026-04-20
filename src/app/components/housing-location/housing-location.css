@@ -1,36 +1,5 @@
-.listing {
-  background: var(--accent-color);
-  border-radius: 30px;
-  padding-bottom: 30px;
-  position: relative;
-}
-.listing-heading {
-  color: var(--primary-color);
-  padding: 10px 20px 0 20px;
-}
-.listing-photo {
-  height: 250px;
-  width: 100%;
-  object-fit: cover;
-  border-radius: 30px 30px 0 0;
-}
-.listing-location {
-  padding: 10px 20px 20px 20px;
-  vertical-align: middle;
-}
-.listing-location::before {
-  content: url('/public/location-pin.svg') / '';
-}
-section.listing a {
-  padding-left: 20px;
-  text-decoration: none;
-  color: var(--primary-color);
-}
-section.listing a::after {
-  content: '\203A';
-  margin-left: 5px;
-}
-
+/* 1. The Interactive Wrapper */
+/* This holds the shadow, scaling, and the 'clipping' mechanism */
 .container {
   display: inline-block;
   width: 100%;
@@ -39,26 +8,75 @@ section.listing a::after {
   padding: 0;
   cursor: pointer;
   transition: transform 0.2s ease-in-out;
-  box-shadow: 0.15s ease;
-  outline: 0.15s ease;
+  
+  /* Unified Radius: Match this with .listing below */
+  border-radius: 30px;
+  
+  /* Soft Shadow: Applied to the wrapper so it follows the curve */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  
+  /* Clipping: Forces everything inside to respect the 30px curve */
+  overflow: hidden; 
+  
   outline: 3px solid transparent;
   outline-offset: 3px;
-  border-radius: 30px;
 }
+
 .container:active {
   transform: scale(0.97);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
+
 .container.selected {
   outline: 3px solid var(--primary-color);
   outline-offset: 2px;
   box-shadow: 0 0 0 6px rgba(96, 93, 200, 0.15);
 }
+
+/* 2. The Listing Card */
+/* Unified into one block */
 .listing {
-  position: relative; /* Context for absolute positioning */
+  position: relative; 
+  background: var(--accent-color);
+  
+  /* Matching Radius: Essential for shadow/border alignment */
+  border-radius: 30px;
   border: 1px solid var(--primary-color);
-  border-radius: 8px;
-  overflow: hidden;
+  
+  padding-bottom: 30px;
+}
+
+/* 3. Internal Elements */
+.listing-heading {
+  color: var(--primary-color);
+  padding: 10px 20px 0 20px;
+}
+
+.listing-photo {
+  height: 250px;
+  width: 100%;
+  object-fit: cover;
+  /* No radius needed here, parent .container handles the clipping */
+}
+
+.listing-location {
+  padding: 10px 20px 20px 20px;
+  vertical-align: middle;
+}
+
+.listing-location::before {
+  content: url('/public/location-pin.svg') / '';
+  margin-right: 5px; /* Added spacing */
+}
+
+section.listing a {
+  padding-left: 20px;
+  text-decoration: none;
+  color: var(--primary-color);
+}
+
+section.listing a::after {
+  content: '\203A';
+  margin-left: 5px;
 }
 
 .wifi-badge {

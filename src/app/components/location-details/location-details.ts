@@ -46,7 +46,14 @@ export class LocationDetails {
     console.log('On Destroyed');
     LocationDetails.count--;
   }
+isFirst(): boolean {
+  return this.housingLocationId === 0;
+}
 
+isLast(): boolean {
+  const total = this.locationService.getAllLocation().length;
+  return this.housingLocationId === total - 1;
+}
   handlePrev(housingLocationInfo: HousingLocationInfo | undefined) {
     if (housingLocationInfo && housingLocationInfo.id >= 0) {
       const prevId = housingLocationInfo.id - 1;

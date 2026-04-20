@@ -130,16 +130,16 @@ export class LocationService {
 
   private historyStack: HousingLocationInfo[][] = [];
 
-  private calculateFilteredList(
+  private deletedLocationList(
     list: HousingLocationInfo[],
-    ids: Set<number>,
+    deleteIds: Set<number>,
   ): HousingLocationInfo[] {
-    return list.filter((loc) => !ids.has(loc.id));
+    return list.filter((loc) => !deleteIds.has(loc.id));
   }
-  deleteLocations(ids: Set<number>) {
+  deleteLocations(deleteIds: Set<number>) {
     this.historyStack.push([...this.housingLocationList]);
 
-    this.housingLocationList = this.calculateFilteredList(this.housingLocationList, ids);
+    this.housingLocationList = this.deletedLocationList(this.housingLocationList, deleteIds);
   }
   restoreLastAction() {
     if (this.historyStack.length === 0) return;

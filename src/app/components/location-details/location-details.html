@@ -5,10 +5,8 @@
     alt="Exterior photo of {{ location?.name }}"
     crossorigin
   />
-  <div>
-    <button (click)="handlePrev(location)"><</button>
-    <button (click)="handleNext(location)">></button>
-  </div>
+  
+  
   <section class="listing-description">
     <h2 class="listing-heading">{{ location?.name }}</h2>
     <p class="listing-location">{{ location?.city }}, {{ location?.state }}</p>
@@ -21,4 +19,9 @@
       <li>Does this location have laundry: {{ location?.laundry }}</li>
     </ul>
   </section>
+  <div class="nav-controls">
+    <button class="nav-btn" (click)="handlePrev(location)" [disabled]="isFirst()">Previous</button>
+
+    <button class="nav-btn" (click)="handleNext(location)" [disabled]="isLast()">Next</button>
+  </div>
 </article>
