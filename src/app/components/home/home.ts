@@ -1,4 +1,4 @@
-import { Component, inject, signal, computed } from '@angular/core';
+import { Component, inject, signal, computed, linkedSignal } from '@angular/core';
 import { HousingLocation } from '../housing-location/housing-location';
 import { HousingLocationInfo } from '../../models/housing-location-info';
 import { LocationService } from '../../services/location-service';
@@ -18,6 +18,7 @@ export class Home {
   mode = signal<'normal' | 'edit'>('normal');
   selectedIds = signal<Set<number>>(new Set());
   selectionCount = computed(() => this.selectedIds().size);
+
 
   handleLocationClick(housingLocationInfo: HousingLocationInfo) {
     if (this.mode() === 'normal') {
