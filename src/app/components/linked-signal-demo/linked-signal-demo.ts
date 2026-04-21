@@ -16,13 +16,16 @@ import {
 export class LinkedSignalDemo {
   userStatus = signal<'online' | 'away' | 'offline'>('offline');
   notificationPreference = signal<boolean>(this.userStatus() === 'online');
-  notificationEffect = effect(() => {
-    if (this.userStatus() === 'online') {
-      this.notificationPreference.set(true);
-    } else {
-      this.notificationPreference.set(false);
-    }
-  });
+
+  constructor() {
+    effect(() => {
+      if (this.userStatus() === 'online') {
+        this.notificationPreference.set(true);
+      } else {
+        this.notificationPreference.set(false);
+      }
+    });
+  }
 
   //Abandoned because of the use of effect,this is used for linked signals
   // notificationsEnabled = computed(() => {
