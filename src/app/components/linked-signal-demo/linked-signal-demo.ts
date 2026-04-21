@@ -1,4 +1,4 @@
-import { Component, signal, computed, ChangeDetectionStrategy, linkedSignal } from '@angular/core';
+import { Component, signal,effect, computed, ChangeDetectionStrategy, linkedSignal } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -8,7 +8,13 @@ import { Component, signal, computed, ChangeDetectionStrategy, linkedSignal } fr
 })
 export class LinkedSignalDemo {
   userStatus = signal<'online' | 'away' | 'offline'>('offline');
-  notificationsEnabled = linkedSignal(() => this.userStatus() === 'online');
+  notificationPreference = signal<boolean>(this.userStatus() === 'online');
+
+  
+//TODO:
+  notificationsEnabled = computed(() => {
+    return this.userStatus() === 'online';
+  });
 
   statusMessage = computed(() => {
     const status = this.userStatus();
@@ -33,14 +39,17 @@ export class LinkedSignalDemo {
 
   goOnline() {
     this.userStatus.set('online');
+    this.notificationPreference.set(true);
   }
 
   goAway() {
     this.userStatus.set('away');
+    this.notificationPreference.set(false);
   }
 
   goOffline() {
     this.userStatus.set('offline');
+    this.notificationPreference.set(false);
   }
 
   toggleStatus() {
@@ -48,9 +57,11 @@ export class LinkedSignalDemo {
     switch (current) {
       case 'offline':
         this.userStatus.set('online');
+        this.notificationPreference.set(true);
         break;
       case 'online':
         this.userStatus.set('away');
+        this.notificationPreference.set(false);
         break;
       case 'away':
         this.userStatus.set('offline');
@@ -58,6 +69,8 @@ export class LinkedSignalDemo {
     }
   }
   toggleNotifications() {
-    this.notificationsEnabled.update((prev) => !prev);
+    //this works for linked signals
+    //this.notificationsEnabled.update((prev) => !prev);
+    this.notificationPreference.update((prev) => !prev);
   }
 }

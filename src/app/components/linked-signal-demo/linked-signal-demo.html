@@ -8,13 +8,13 @@
   <div class="status-info">
     <div class="notifications">
       <strong>Notifications:</strong>
-      @if (notificationsEnabled()) {
+      @if (notificationPreference()) {
         Enabled
       } @else {
         Disabled
       }
       <button (click)="toggleNotifications()" class="override-btn">
-        @if (notificationsEnabled()) {
+        @if (notificationPreference()) {
           Disable
         } @else {
           Enable
