@@ -67,14 +67,14 @@ export class LinkedSignalDemo {
     switch (current) {
       case 'offline':
         this.userStatus.set('online');
-        this.notificationPreference.set(true);
+        //this.notificationPreference.set(true);
         break;
       case 'online':
         this.userStatus.set('away');
-        this.notificationPreference.set(false);
+        //this.notificationPreference.set(false);
         break;
       case 'away':
-        this.userStatus.set('offline');
+        //this.userStatus.set('offline');
         break;
     }
   }
