@@ -1,4 +1,11 @@
-import { Component, signal,effect, computed, ChangeDetectionStrategy, linkedSignal } from '@angular/core';
+import {
+  Component,
+  signal,
+  effect,
+  computed,
+  ChangeDetectionStrategy,
+  linkedSignal,
+} from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -9,12 +16,18 @@ import { Component, signal,effect, computed, ChangeDetectionStrategy, linkedSign
 export class LinkedSignalDemo {
   userStatus = signal<'online' | 'away' | 'offline'>('offline');
   notificationPreference = signal<boolean>(this.userStatus() === 'online');
-
-  
-//TODO:
-  notificationsEnabled = computed(() => {
-    return this.userStatus() === 'online';
+  notificationEffect = effect(() => {
+    if (this.userStatus() === 'online') {
+      this.notificationPreference.set(true);
+    } else {
+      this.notificationPreference.set(false);
+    }
   });
+
+  //Abandoned because of the use of effect,this is used for linked signals
+  // notificationsEnabled = computed(() => {
+  //   return this.userStatus() === 'online';
+  // });
 
   statusMessage = computed(() => {
     const status = this.userStatus();
@@ -39,17 +52,14 @@ export class LinkedSignalDemo {
 
   goOnline() {
     this.userStatus.set('online');
-    this.notificationPreference.set(true);
   }
 
   goAway() {
     this.userStatus.set('away');
-    this.notificationPreference.set(false);
   }
 
   goOffline() {
     this.userStatus.set('offline');
-    this.notificationPreference.set(false);
   }
 
   toggleStatus() {
