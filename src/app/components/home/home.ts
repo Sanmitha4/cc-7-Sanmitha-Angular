@@ -1,58 +1,95 @@
-import { Component, inject, signal, computed } from '@angular/core';
+
+import { Component, inject, signal, computed, linkedSignal } from '@angular/core';
 import { HousingLocation } from '../housing-location/housing-location';
 import { HousingLocationInfo } from '../../models/housing-location-info';
 import { LocationService, BASE_URL } from '../../services/location-service';
 import { Router } from '@angular/router';
-
-// Define the shape for your ViewModel
-export interface HousingLocationInfoViewModel extends HousingLocationInfo {
-  selected: boolean;
-}
+import { HousingLocationInfoViewModel } from '../../models/housing-location-info';
 
 @Component({
   selector: 'app-home',
   imports: [HousingLocation],
   templateUrl: './home.html',
   styleUrl: './home.css',
+  //providers:[{LocationService}],
 })
 export class Home {
-  locationService = inject(LocationService);
+  locationService: LocationService = inject(LocationService);
   router = inject(Router);
-  baseUrl = inject(BASE_URL);
+  baseUrl: string = inject(BASE_URL);
 
   mode = signal<'normal' | 'edit'>('normal');
+  modeString=computed(()=>
+    this.mode()==='edit'?'Select items':'Click on a card to see details')
+
   selectedIds = signal<Set<number>>(new Set());
   selectionCount = computed(() => this.selectedIds().size);
 
-  // Use 'computed' instead of 'linkedSignal' for derived UI state
-  locationToDisplay = computed<HousingLocationInfoViewModel[]>(() => {
-    const locations = this.locationService.getAllLocation()();
-    const currentSelectedIds = this.selectedIds();
 
-    return locations.map((hl) => ({
-      ...hl,
-      selected: currentSelectedIds.has(hl.id)
-    }));
-  });
+// locationToDisplay=linkedSignal<HousingLocationInfoViewModel[]>(()=>{
+// const locationsSignal=this.locationService.getAllLocation();
+// const viewLocations=locationsSignal().map((hl)=>{
+//   return{...hl,selected:false}
+// });
+// return viewLocations});
 
-  handleLocationClick(vm: HousingLocationInfo) {
-    console.log(`Home: ${vm.name} is clicked`);
 
-    if (this.mode() === 'normal') {
-      // Fix: Passing variable, not string
-      this.router.navigate(['details', vm.id]); 
-    } else {
-      // Toggle selection in the Set
-      this.selectedIds.update((prev) => {
-        const next = new Set(prev);
-        if (next.has(vm.id)) {
-          next.delete(vm.id);
-        } else {
-          next.add(vm.id);
-        }
-        return next;
-      });
-    }
+
+//we should derive the value of locationsToDisplay by accounting the current values of 'selected'attributes too
+//check if this loaction is already in selected state.
+//we can figure that out by finding the model in the prev location models,and use that models's selected value, and set it to the new model we are creating
+
+
+locationsToDisplay = linkedSignal<HousingLocationInfo[], HousingLocationInfoViewModel[]>({
+  source:this.locationService.getAllLocation(), 
+  
+  computation: (newDependencyHouseLocationsInfoArray, prevValue) => {
+    const prevLocationViewModels = (prevValue?.value as HousingLocationInfoViewModel[]) ?? [];
+    const viewLocation=newDependencyHouseLocationsInfoArray.map((hl)=>{
+      const matchedModel=prevLocationViewModels.find(
+        (prevLocation)=>prevLocation.id===hl.id);
+        return { 
+        ...hl, 
+        selected: matchedModel?.selected ?? false 
+      };
+      
+    })
+    return viewLocation;
+  }
+});
+
+
+
+  
+handleLocationClick(housingLocationInfo:HousingLocationInfoViewModel){
+  console.log(`Home:${housingLocationInfo.name}is clicked`);
+
+  if(this.mode()==='normal'){
+
+    this.router.navigate(['details','housingLocationInfo.id']);
+    const viewModels=this.locationsToDisplay().map(vm=>{
+      const newVm={...vm};
+      newVm.selected=false;
+      return newVm;
+      
+    })
+    this.locationsToDisplay.set(viewModels)
+  }else{
+    const viewModel=this.locationsToDisplay().map((vm)=>{
+      if(vm.id===housingLocationInfo.id){
+        const newVm={...vm};
+        newVm.selected=!newVm.selected;
+        return newVm;
+      }
+      return vm
+    })
+  }
+}
+
+
+
+  isSelected(id: number): boolean {
+    return this.selectedIds().has(id);
   }
 
   handleCheckbox(event: Event) {
@@ -61,10 +98,12 @@ export class Home {
     if (!checked) {
       this.selectedIds.set(new Set());
     }
+    
   }
 
   deleteSelected() {
-    if (confirm(`Are you sure you want to delete ${this.selectionCount()} items?`)) {
+    const count = this.selectionCount();
+    if (confirm(`Are you sure you want to delete ${count} items?`)) {
       this.locationService.deleteLocations(this.selectedIds());
       this.selectedIds.set(new Set());
     }
@@ -73,17 +112,16 @@ export class Home {
   restoreSelected() {
     this.locationService.restoreLastAction();
   }
-
   canRestore(): boolean {
     return this.locationService.canRestore();
   }
 
-  handleAddLocation() {
-    const aLocation: HousingLocationInfo = {
-      id: 0, // Service handles proper ID generation
-      name: 'A new home',
-      city: 'delhi',
-      state: 'India',
+  handleAddLocation(){
+    const aLocation={
+      id:0,
+      name:'A new home',
+      city:'delhi',
+      state:'India',
       photo: `${this.baseUrl}/saru-robert-9rP3mxf8qWI-unsplash.jpg`,
       availableUnits: 10,
       wifi: false,
@@ -92,3 +130,5 @@ export class Home {
     this.locationService.addLocation(aLocation);
   }
 }
+
+

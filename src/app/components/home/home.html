@@ -38,11 +38,11 @@
 </div>
 
   <section class="results">
-    @for (housingLocation of locationToDisplay(); track housingLocation.id) {
+    @for (housingLocation of locationsToDisplay(); track housingLocation.id) {
       <app-housing-location
         [housingLocation]="housingLocation"
         [mode]="mode()"
-        [isSelected]="housingLocation.selected"
+        [isSelected]="housingLocation.selected ?? false "
         (onLocationClick)="handleLocationClick($event)"
       />
     } @empty {
@@ -50,3 +50,5 @@
     }
   </section>
 </section>
+
+
