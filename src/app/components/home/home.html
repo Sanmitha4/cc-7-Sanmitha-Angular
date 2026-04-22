@@ -28,20 +28,21 @@
         }
       </div>
     }
-    <button 
-    class="primary add-btn" 
-    type="button" 
-    (click)="addNewLocation()">
-    Add Location
-  </button>
+    <button
+      class="secondary"
+      type="button"
+      (click)="handleAddLocation()"
+    >
+      Add Location
+    </button>
 </div>
 
   <section class="results">
-    @for (housingLocation of locationService.getAllLocation(); track housingLocation.id) {
+    @for (housingLocation of locationToDisplay(); track housingLocation.id) {
       <app-housing-location
         [housingLocation]="housingLocation"
         [mode]="mode()"
-        [isSelected]="isSelected(housingLocation.id)"
+        [isSelected]="housingLocation.selected"
         (onLocationClick)="handleLocationClick($event)"
       />
     } @empty {

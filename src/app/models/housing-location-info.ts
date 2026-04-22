@@ -9,6 +9,6 @@ export interface HousingLocationInfo {
   laundry: boolean;
 }
 
-export class  HousingLocationInfoViewModel{
-  
+export interface HousingLocationInfoViewModel extends HousingLocationInfo {
+  selected: boolean | undefined;
 }
