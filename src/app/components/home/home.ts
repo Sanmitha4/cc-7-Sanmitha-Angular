@@ -16,8 +16,15 @@ export class Home {
   router = inject(Router);
 
   mode = signal<'normal' | 'edit'>('normal');
+
+
+  // modeString=computed(()=>
+  //   this.mode()==='edit'?'Selct items':'Click on a card to see details')
+
   selectedIds = signal<Set<number>>(new Set());
   selectionCount = computed(() => this.selectedIds().size);
+//location ServiceDisplay=linkedSignal<Ho
+  
 
 
   handleLocationClick(housingLocationInfo: HousingLocationInfo) {

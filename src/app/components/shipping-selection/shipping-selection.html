@@ -1,0 +1,10 @@
+<p>shipping-selection works!</p>
+<div class="container">
+  <select>
+    @for (shippingOption of shippingOptions(); track shippingOption) {
+      <option>{{ shippingOption }}</option>
+    }
+  </select>
+  <input type="text" [value]="userSelectedShippingOption()" (change)="handleUserInput($event)" />
+  <button (click)="changeShippingOptions()">Change shipping options</button>
+</div>

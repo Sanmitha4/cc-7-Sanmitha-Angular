@@ -8,3 +8,7 @@ export interface HousingLocationInfo {
   wifi: boolean;
   laundry: boolean;
 }
+
+export class  HousingLocationInfoViewModel{
+  
+}

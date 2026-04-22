@@ -19,7 +19,8 @@ export class LocationService {
 
   private readonly baseUrl = inject(BASE_URL);
 
-  private housingLocationList: HousingLocationInfo[] = [
+  //readonly
+  private  housingLocationList: HousingLocationInfo[] = [
     {
       id: 0,
       name: 'Acme Fresh Start Housing',

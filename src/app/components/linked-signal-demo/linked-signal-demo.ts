@@ -15,7 +15,7 @@ import {
 })
 export class LinkedSignalDemo {
   userStatus = signal<'online' | 'away' | 'offline'>('offline');
-  notificationPreference = signal<boolean>(this.userStatus() === 'online');
+  notificationPreference = linkedSignal<boolean>(()=>this.userStatus() === 'online');
 
   constructor() {
     effect(() => {
