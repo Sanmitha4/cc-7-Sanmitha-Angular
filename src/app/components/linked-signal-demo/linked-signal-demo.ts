@@ -6,12 +6,14 @@ import {
   ChangeDetectionStrategy,
   linkedSignal,
 } from '@angular/core';
+import { ShippingSelection } from "@components/shipping-selection/shipping-selection";
 
 @Component({
   selector: 'app-root',
   templateUrl: './linked-signal-demo.html',
   styleUrl: './linked-signal-demo.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [ShippingSelection],
 })
 export class LinkedSignalDemo {
   userStatus = signal<'online' | 'away' | 'offline'>('offline');

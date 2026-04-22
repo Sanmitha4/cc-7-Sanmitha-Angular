@@ -11,12 +11,21 @@ interface ShippingMethod {
   styleUrl: './shipping-selection.css',
 })
 export class ShippingSelection {
-  shippingOptions = signal<string[]>([
-    'Air' ,
-    'Sky' ,
-    'Ground' 
-  ]);
-  userSelectedShippingOption = linkedSignal(() => this.shippingOptions()[0]);
+  shippingOptions = signal<string[]>(['Air' ,'Sea' ,'Ground' ]);
+  //userSelectedShippingOption = linkedSignal(() => this.shippingOptions()[0]);
+
+  
+
+  userSelectedShippingOption = linkedSignal<string[], string>({
+    source: this.shippingOptions,
+    computation: (newDependencyValue, myPreviousValue): string => {
+      if (newDependencyValue.includes(myPreviousValue?.value as string)) {
+        return myPreviousValue?.value ?? '';
+      } else {
+        return newDependencyValue[0];
+      }
+    },
+  });
 
   changeShippingOptions() {
     this.shippingOptions.set([
