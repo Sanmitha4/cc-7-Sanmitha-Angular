@@ -11,10 +11,8 @@ interface ShippingMethod {
   styleUrl: './shipping-selection.css',
 })
 export class ShippingSelection {
-  shippingOptions = signal<string[]>(['Air' ,'Sea' ,'Ground' ]);
+  shippingOptions = signal<string[]>(['Air', 'Sea', 'Ground']);
   //userSelectedShippingOption = linkedSignal(() => this.shippingOptions()[0]);
-
-  
 
   userSelectedShippingOption = linkedSignal<string[], string>({
     source: this.shippingOptions,
@@ -28,11 +26,7 @@ export class ShippingSelection {
   });
 
   changeShippingOptions() {
-    this.shippingOptions.set([
-      'Email' ,
-      'Sea' ,
-      'Postal Service' ,
-    ]);
+    this.shippingOptions.set(['Courier', 'Sea', 'Postal Service']);
   }
   handleUserInput(event: Event) {
     const userSelectedValue = event.target as HTMLInputElement;
@@ -40,4 +34,3 @@ export class ShippingSelection {
     this.userSelectedShippingOption.set(userSelectedValue.value);
   }
 }
-

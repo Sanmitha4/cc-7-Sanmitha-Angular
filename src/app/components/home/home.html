@@ -28,7 +28,13 @@
         }
       </div>
     }
-  </div>
+    <button 
+    class="primary add-btn" 
+    type="button" 
+    (click)="addNewLocation()">
+    Add Location
+  </button>
+</div>
 
   <section class="results">
     @for (housingLocation of locationService.getAllLocation(); track housingLocation.id) {

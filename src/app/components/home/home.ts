@@ -3,6 +3,8 @@ import { HousingLocation } from '../housing-location/housing-location';
 import { HousingLocationInfo } from '../../models/housing-location-info';
 import { LocationService } from '../../services/location-service';
 import { Router } from '@angular/router';
+import { HousingLocationInfoViewModel } from '../../models/housing-location-info';
+import {locationsSi}
 
 @Component({
   selector: 'app-home',
@@ -18,30 +20,49 @@ export class Home {
   mode = signal<'normal' | 'edit'>('normal');
 
 
-  // modeString=computed(()=>
-  //   this.mode()==='edit'?'Selct items':'Click on a card to see details')
+  modeString=computed(()=>
+    this.mode()==='edit'?'Selct items':'Click on a card to see details')
 
   selectedIds = signal<Set<number>>(new Set());
   selectionCount = computed(() => this.selectedIds().size);
-//location ServiceDisplay=linkedSignal<Ho
+
+
+locationToDisplay=linkedSignal<HousingLocationInfoViewModel[]>(()=>{
+const locationsSignal=this.locationService.getAllLocation();
+const viewLocations=this.locationsSignal().map((hl)=>{
+  return{...hl,selected.false}
+});
+return viewLocations});
   
+handleLocationClick(housingLocationInfo:HousingLocationInfoViewModel){
+  console.log(`Home:${housingLocationInfo.name}is clicked`);
 
 
-  handleLocationClick(housingLocationInfo: HousingLocationInfo) {
-    if (this.mode() === 'normal') {
-      this.router.navigate(['details', housingLocationInfo.id]);
-    } else {
-      this.selectedIds.update((prev) => {
-        const next = new Set(prev);
-        if (next.has(housingLocationInfo.id)) {
-          next.delete(housingLocationInfo.id);
-        } else {
-          next.add(housingLocationInfo.id);
-        }
-        return next;
-      });
-    }
+  if(this.mode()==='normal'){
+    this.router.navigate(['details','housingLocationInfo.id']);
+    const viewModels=this.locationToDisplay().map((vm)=>{
+      const vm={..vm};
+      newVm.selected=false;
+      
+    })
   }
+}
+
+  // handleLocationClick(housingLocationInfo: HousingLocationInfo) {
+  //   if (this.mode() === 'normal') {
+  //     this.router.navigate(['details', housingLocationInfo.id]);
+  //   } else {
+  //     this.selectedIds.update((prev) => {
+  //       const next = new Set(prev);
+  //       if (next.has(housingLocationInfo.id)) {
+  //         next.delete(housingLocationInfo.id);
+  //       } else {
+  //         next.add(housingLocationInfo.id);
+  //       }
+  //       return next;
+  //     });
+  //   }
+  // }
 
   isSelected(id: number): boolean {
     return this.selectedIds().has(id);

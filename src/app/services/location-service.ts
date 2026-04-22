@@ -1,4 +1,4 @@
-import { inject, Injectable, InjectionToken } from '@angular/core';
+import { inject, Injectable, InjectionToken, signal } from '@angular/core';
 import { HousingLocationInfo } from '../models/housing-location-info';
 
 export const BASE_URL = new InjectionToken<string>('base url', {
@@ -20,7 +20,7 @@ export class LocationService {
   private readonly baseUrl = inject(BASE_URL);
 
   //readonly
-  private  housingLocationList: HousingLocationInfo[] = [
+  private housingLocationList: HousingLocationInfo[] = [
     {
       id: 0,
       name: 'Acme Fresh Start Housing',
@@ -122,11 +122,28 @@ export class LocationService {
       laundry: true,
     },
   ];
+
+  locations = signal<HousingLocationInfo[]>(this.housingLocationList);
   getAllLocation() {
-    return this.housingLocationList;
+    return this.locations.asReadonly();
   }
+
   getLocationForId(id: number): HousingLocationInfo | undefined {
     return this.housingLocationList.find((location) => location.id === id);
+  }
+
+  addLocation(location: HousingLocationInfo) {
+
+    const currentLocations=this.locations();
+    const newLocation={
+      ...location,
+      id:currentLocations.length
+    }
+    this.locations.update(list=>[...list,newLocation])
+
+    // location.id=currentLocations.length;
+    // currentLocations.push(location);
+    // this.locations.set(currentLocations)
   }
 
   private historyStack: HousingLocationInfo[][] = [];
@@ -153,4 +170,3 @@ export class LocationService {
     return this.historyStack.length > 0;
   }
 }
-

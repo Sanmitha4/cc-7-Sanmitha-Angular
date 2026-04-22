@@ -1,7 +1,7 @@
 .listing-photo {
   height: 600px;
   width: 50%;
-  object-fit: cover; 
+  object-fit: cover;
   border-radius: 12px;
   float: right;
   overflow: hidden;
@@ -94,29 +94,29 @@ input {
   display: flex;
   gap: 2rem;
   padding: 2rem;
-  flex-wrap: wrap; 
+  flex-wrap: wrap;
 }
 
 .listing-photo {
-  flex: 1 1 500px; 
+  flex: 1 1 500px;
   height: 600px;
-  object-fit: cover; 
+  object-fit: cover;
   border-radius: 12px;
   overflow: hidden;
 }
 
 .listing-content {
-  flex: 1 1 400px; 
+  flex: 1 1 400px;
 }
 
 .listing-heading {
-  font-size: 3rem; 
+  font-size: 3rem;
   font-weight: bold;
   margin-bottom: 1rem;
 }
 
 .listing-location {
-  font-size: 1.5rem; 
+  font-size: 1.5rem;
   margin-bottom: 1rem;
   display: flex;
   align-items: center;
