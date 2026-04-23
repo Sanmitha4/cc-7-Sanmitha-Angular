@@ -2,12 +2,13 @@ import { Component, inject, signal, computed, linkedSignal } from '@angular/core
 import { HousingLocation } from '../housing-location/housing-location';
 import { HousingLocationInfo } from '../../models/housing-location-info';
 import { LocationService, BASE_URL } from '../../services/location-service';
-import { Router } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { HousingLocationInfoViewModel } from '../../models/housing-location-info';
+import { FormsDemo } from '@components/forms-demo/forms-demo';
 
 @Component({
   selector: 'app-home',
-  imports: [HousingLocation],
+  imports: [HousingLocation, RouterOutlet],
   templateUrl: './home.html',
   styleUrl: './home.css',
   //providers:[{LocationService}],

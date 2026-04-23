@@ -1,3 +1,5 @@
+<router-outlet></router-outlet>
+
 <section>
   <form>
     <input type="text" placeholder="Filter by city" />
@@ -28,28 +30,20 @@
         }
       </div>
     }
-    <button
-      class="secondary"
-      type="button"
-      (click)="handleAddLocation()"
-    >
-      Add Location
-    </button>
-</div>
+    <button class="secondary" type="button" (click)="handleAddLocation()">Add Location</button>
+  </div>
 
   <section class="results">
     @for (housingLocation of locationsToDisplay(); track housingLocation.id) {
       <app-housing-location
         [housingLocation]="housingLocation"
         [mode]="mode()"
-        [isSelected]="housingLocation.selected ?? false "
+        [isSelected]="housingLocation.selected ?? false"
         (onLocationClick)="handleLocationClick(housingLocation)"
-        
       />
     } @empty {
       <p>No locations found.</p>
     }
   </section>
 </section>
-
-
+<router-outlet></router-outlet>

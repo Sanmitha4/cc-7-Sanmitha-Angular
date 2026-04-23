@@ -15,7 +15,12 @@ export const routes: Routes = [
   {
     path: '',
     component: Home,
-    title: 'Home page',
+    title: 'LocationHome',
+    children:[{
+      path:'edit',
+      component: FormsDemo,
+      title:'Home Location'
+    }]
   },
   {
     path: 'details/:id',
