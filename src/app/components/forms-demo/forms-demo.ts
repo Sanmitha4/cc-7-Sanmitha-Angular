@@ -1,5 +1,11 @@
 import { Component, inject } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, FormBuilder ,Validators} from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  FormBuilder,
+  Validators,
+} from '@angular/forms';
 
 @Component({
   selector: 'app-forms-demo',
