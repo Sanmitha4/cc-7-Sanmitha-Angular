@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { Router, RouterOutlet, RouterLinkWithHref } from '@angular/router';
 import { Home } from './components/home/home';
+import { Form } from '@angular/forms';
 //import { Counter } from "./components/counter/counter";
 
 @Component({

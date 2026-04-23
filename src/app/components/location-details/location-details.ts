@@ -98,10 +98,12 @@ import { HousingLocationInfo } from '../../models/housing-location-info';
 export class LocationDetails {
   route: ActivatedRoute = inject(ActivatedRoute);
   router = inject(Router);
+  //id=input.required<number>();
   locationService: LocationService = inject(LocationService);
   location: HousingLocationInfo | undefined;
 
   housingLocationId = signal<number>(-1);
+ 
 
   isFirst = computed(() => this.housingLocationId() === 0);
 

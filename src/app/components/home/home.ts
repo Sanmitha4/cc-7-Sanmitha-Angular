@@ -55,7 +55,8 @@ export class Home {
   });
 
   handleLocationClick(housingLocationInfo: HousingLocationInfoViewModel) {
-    console.log(`Home:${housingLocationInfo.name}is clicked`);
+    console.log(`Home:${housingLocationInfo}is clicked`);
+    // console.log(housingLocationInfo);
 
     if (this.mode() === 'normal') {
       this.router.navigate(['details', 'housingLocationInfo.id']);
