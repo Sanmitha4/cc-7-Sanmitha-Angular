@@ -4,11 +4,11 @@ import { HousingLocationInfo } from '../../models/housing-location-info';
 import { LocationService, BASE_URL } from '../../services/location-service';
 import { Router } from '@angular/router';
 import { HousingLocationInfoViewModel } from '../../models/housing-location-info';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AddLocation } from '../add-location/add-location';
 
 @Component({
   selector: 'app-home',
-  imports: [HousingLocation, ReactiveFormsModule],
+  imports: [HousingLocation, AddLocation],
   templateUrl: './home.html',
   styleUrl: './home.css',
   //providers:[{LocationService}],
@@ -17,7 +17,6 @@ export class Home {
   locationService: LocationService = inject(LocationService);
   router = inject(Router);
   baseUrl: string = inject(BASE_URL);
-  formBuilder = inject(FormBuilder);
 
   mode = signal<'normal' | 'edit'>('normal');
   modeString = computed(() =>
@@ -28,15 +27,6 @@ export class Home {
   selectionCount = computed(() => this.selectedIds().size);
 
   showAddForm = signal(false);
-
-  addLocationForm = this.formBuilder.group({
-    name: ['', Validators.required],
-    city: ['', Validators.required],
-    state: ['', Validators.required],
-    availableUnits: [0, [Validators.required, Validators.min(0)]],
-    wifi: [false],
-    laundry: [false],
-  });
 
   locationsToDisplay = linkedSignal<HousingLocationInfo[], HousingLocationInfoViewModel[]>({
     source: this.locationService.getAllLocation(),
@@ -123,30 +113,16 @@ export class Home {
     this.showAddForm.set(true);
   }
 
-  submitAddLocation() {
-    if (this.addLocationForm.valid) {
-      const formValue = this.addLocationForm.value;
-      const aLocation = {
-        id: 0,
-        name: formValue.name ?? '',
-        city: formValue.city ?? '',
-        state: formValue.state ?? '',
-        photo: `${this.baseUrl}/saru-robert-9rP3mxf8qWI-unsplash.jpg`,
-        availableUnits: formValue.availableUnits ?? 0,
-        wifi: formValue.wifi ?? false,
-        laundry: formValue.laundry ?? false,
-      };
-      this.locationService.addLocation(aLocation);
-      this.closeAddForm();
-    }
+  onLocationSaved(partial: Omit<import('../../models/housing-location-info').HousingLocationInfo, 'id' | 'photo'>) {
+    this.locationService.addLocation({
+      ...partial,
+      id: 0,
+      photo: `${this.baseUrl}/saru-robert-9rP3mxf8qWI-unsplash.jpg`,
+    });
+    this.showAddForm.set(false);
   }
 
-  cancelAddLocation() {
-    this.closeAddForm();
-  }
-
-  private closeAddForm() {
-    this.addLocationForm.reset({ availableUnits: 0, wifi: false, laundry: false });
+  onAddCancelled() {
     this.showAddForm.set(false);
   }
 }
