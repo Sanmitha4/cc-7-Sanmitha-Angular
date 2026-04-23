@@ -6,6 +6,8 @@
   width: 100vw; */
   inset: 0;
   background-color: rgb(15, 14, 14);
+  z-index: 1000;
+  cursor: pointer;
 }
 
 .panel {
