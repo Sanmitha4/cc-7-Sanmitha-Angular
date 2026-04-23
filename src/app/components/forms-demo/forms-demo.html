@@ -1,1 +1,17 @@
-<p>forms-demo works!</p>
+<form>
+  <label for="name">Name: </label>
+  <input id="name" type="text" [formControl]="name" (change)="handleChange($event)" />
+</form>
+<p>Entered Value ={{ name.value }}</p>
+
+<button (click)="updateName()">Update name</button>
+
+
+
+<form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+    <label for="first-name">First Name:</label>
+    <input id="first" type="text" formControlName="firstName"/>
+    <label for="last-name">Last Name:</label>
+    <input id="last" type="text" formControlName="lastName"/>
+    <button type="submit" [disabled]="!profileForm.valid">Submit</button>
+</form>
