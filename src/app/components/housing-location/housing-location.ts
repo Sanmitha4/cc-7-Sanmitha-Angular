@@ -8,8 +8,7 @@ import { MockLocationService } from '../../services/mock-location-service';
   imports: [],
   templateUrl: './housing-location.html',
   styleUrl: './housing-location.css',
-  //providers: [{ provide: BASE_URL, useValue: "ohhh"}]
-  // })
+
 })
 export class HousingLocation {
   housingLocation = input.required<HousingLocationInfo>();
@@ -24,7 +23,4 @@ export class HousingLocation {
     this.onLocationClick.emit(this.housingLocation());
   }
 }
-  //ngOnInit(){
-  //   console.log(this.housingLocation())
-  //   }
-
+  

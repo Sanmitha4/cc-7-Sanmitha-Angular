@@ -1,7 +1,9 @@
 .overlay {
   position: fixed;
   inset: 0;
-  background-color: rgb(15, 14, 14);
+  background-color: rgba(15, 14, 14, 0.45);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   z-index: 1000;
   cursor: pointer;
 }
@@ -11,8 +13,9 @@
   right: 0;
   top: 0;
   height: 100vh;
-  width: 400px;
+  width: 650px;
   background-color: white;
+  box-shadow: -24px 0 48px rgba(0, 0, 0, 0.25);
   transform: translateX(100%);
   transition: transform 0.3s ease;
 }
