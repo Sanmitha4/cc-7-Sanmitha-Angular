@@ -22,7 +22,7 @@ export class LocationDetails {
   isFirst = computed(() => this.housingLocationId() === 0);
 
   isLast = computed(() => {
-    const total = this.locationService.getAllLocation().length;
+    const total = this.locationService.getAllLocation()().length;
     return this.housingLocationId() === total - 1;
   });
 

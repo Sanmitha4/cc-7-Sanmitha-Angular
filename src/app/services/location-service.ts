@@ -158,12 +158,14 @@ export class LocationService {
     this.historyStack.push([...this.housingLocationList]);
 
     this.housingLocationList = this.deletedLocationList(this.housingLocationList, deleteIds);
+    this.locations.set([...this.housingLocationList]);
   }
   restoreLastAction() {
     if (this.historyStack.length === 0) return;
     const previousState = this.historyStack.pop();
     if (previousState) {
       this.housingLocationList = previousState;
+      this.locations.set([...this.housingLocationList]);
     }
   }
   canRestore(): boolean {

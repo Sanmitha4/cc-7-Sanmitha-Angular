@@ -4,10 +4,11 @@ import { HousingLocationInfo } from '../../models/housing-location-info';
 import { LocationService, BASE_URL } from '../../services/location-service';
 import { Router } from '@angular/router';
 import { HousingLocationInfoViewModel } from '../../models/housing-location-info';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
-  imports: [HousingLocation],
+  imports: [HousingLocation, ReactiveFormsModule],
   templateUrl: './home.html',
   styleUrl: './home.css',
   //providers:[{LocationService}],
@@ -16,6 +17,7 @@ export class Home {
   locationService: LocationService = inject(LocationService);
   router = inject(Router);
   baseUrl: string = inject(BASE_URL);
+  formBuilder = inject(FormBuilder);
 
   mode = signal<'normal' | 'edit'>('normal');
   modeString = computed(() =>
@@ -25,16 +27,16 @@ export class Home {
   selectedIds = signal<Set<number>>(new Set());
   selectionCount = computed(() => this.selectedIds().size);
 
-  // locationToDisplay=linkedSignal<HousingLocationInfoViewModel[]>(()=>{
-  // const locationsSignal=this.locationService.getAllLocation();
-  // const viewLocations=locationsSignal().map((hl)=>{
-  //   return{...hl,selected:false}
-  // });
-  // return viewLocations});
+  showAddForm = signal(false);
 
-  //we should derive the value of locationsToDisplay by accounting the current values of 'selected'attributes too
-  //check if this loaction is already in selected state.
-  //we can figure that out by finding the model in the prev location models,and use that models's selected value, and set it to the new model we are creating
+  addLocationForm = this.formBuilder.group({
+    name: ['', Validators.required],
+    city: ['', Validators.required],
+    state: ['', Validators.required],
+    availableUnits: [0, [Validators.required, Validators.min(0)]],
+    wifi: [false],
+    laundry: [false],
+  });
 
   locationsToDisplay = linkedSignal<HousingLocationInfo[], HousingLocationInfoViewModel[]>({
     source: this.locationService.getAllLocation(),
@@ -56,10 +58,9 @@ export class Home {
 
   handleLocationClick(housingLocationInfo: HousingLocationInfoViewModel) {
     console.log(`Home:${housingLocationInfo}is clicked`);
-    // console.log(housingLocationInfo);
 
     if (this.mode() === 'normal') {
-      this.router.navigate(['details', 'housingLocationInfo.id']);
+      this.router.navigate(['details', housingLocationInfo.id]);
       const viewModels = this.locationsToDisplay().map((vm) => {
         const newVm = { ...vm };
         newVm.selected = false;
@@ -67,13 +68,24 @@ export class Home {
       });
       this.locationsToDisplay.set(viewModels);
     } else {
-      const viewModel = this.locationsToDisplay().map((vm) => {
+      const viewModels = this.locationsToDisplay().map((vm) => {
         if (vm.id === housingLocationInfo.id) {
           const newVm = { ...vm };
           newVm.selected = !newVm.selected;
           return newVm;
         }
         return vm;
+      });
+      this.locationsToDisplay.set(viewModels);
+
+      this.selectedIds.update((prev) => {
+        const next = new Set(prev);
+        if (next.has(housingLocationInfo.id)) {
+          next.delete(housingLocationInfo.id);
+        } else {
+          next.add(housingLocationInfo.id);
+        }
+        return next;
       });
     }
   }
@@ -87,6 +99,8 @@ export class Home {
     this.mode.set(checked ? 'edit' : 'normal');
     if (!checked) {
       this.selectedIds.set(new Set());
+      const viewModels = this.locationsToDisplay().map((vm) => ({ ...vm, selected: false }));
+      this.locationsToDisplay.set(viewModels);
     }
   }
 
@@ -106,16 +120,30 @@ export class Home {
   }
 
   handleAddLocation() {
-    const aLocation = {
-      id: 0,
-      name: 'A new home',
-      city: 'delhi',
-      state: 'India',
-      photo: `${this.baseUrl}/saru-robert-9rP3mxf8qWI-unsplash.jpg`,
-      availableUnits: 10,
-      wifi: false,
-      laundry: false,
-    };
-    this.locationService.addLocation(aLocation);
+    this.showAddForm.set(true);
+  }
+
+  submitAddLocation() {
+    if (this.addLocationForm.valid) {
+      const formValue = this.addLocationForm.value;
+      const aLocation = {
+        id: 0,
+        name: formValue.name ?? '',
+        city: formValue.city ?? '',
+        state: formValue.state ?? '',
+        photo: `${this.baseUrl}/saru-robert-9rP3mxf8qWI-unsplash.jpg`,
+        availableUnits: formValue.availableUnits ?? 0,
+        wifi: formValue.wifi ?? false,
+        laundry: formValue.laundry ?? false,
+      };
+      this.locationService.addLocation(aLocation);
+      this.addLocationForm.reset({ availableUnits: 0, wifi: false, laundry: false });
+      this.showAddForm.set(false);
+    }
+  }
+
+  cancelAddLocation() {
+    this.addLocationForm.reset({ availableUnits: 0, wifi: false, laundry: false });
+    this.showAddForm.set(false);
   }
 }
