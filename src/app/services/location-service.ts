@@ -129,17 +129,17 @@ export class LocationService {
   }
 
   getLocationForId(id: number): HousingLocationInfo | undefined {
-    return this.housingLocationList.find((location) => location.id === id);
+    return this.locations().find((location) => location.id === id);
   }
 
   addLocation(location: HousingLocationInfo) {
 
-    const currentLocations=this.locations();
-    const newLocation={
+    const currentLocations = this.locations();
+    const newLocation = {
       ...location,
-      id:currentLocations.length
-    }
-    this.locations.update(list=>[...list,newLocation])
+      id: currentLocations.length,
+    };
+    this.locations.update((list) => [...list, newLocation]);
 
     // location.id=currentLocations.length;
     // currentLocations.push(location);
@@ -155,15 +155,15 @@ export class LocationService {
     return list.filter((loc) => !deleteIds.has(loc.id));
   }
   deleteLocations(deleteIds: Set<number>) {
-    this.historyStack.push([...this.housingLocationList]);
+    this.historyStack.push([...this.locations()]);
 
-    this.housingLocationList = this.deletedLocationList(this.housingLocationList, deleteIds);
+    this.locations.update((list) => this.deletedLocationList(list, deleteIds));
   }
   restoreLastAction() {
     if (this.historyStack.length === 0) return;
     const previousState = this.historyStack.pop();
     if (previousState) {
-      this.housingLocationList = previousState;
+      this.locations.set(previousState);
     }
   }
   canRestore(): boolean {

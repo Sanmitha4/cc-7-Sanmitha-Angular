@@ -15,6 +15,7 @@ export class LocationDetails {
   router = inject(Router);
   //id=input.required<number>();
   locationService: LocationService = inject(LocationService);
+  locations = this.locationService.getAllLocation();
   location: HousingLocationInfo | undefined;
 
   housingLocationId = signal<number>(-1);
@@ -22,8 +23,9 @@ export class LocationDetails {
   isFirst = computed(() => this.housingLocationId() === 0);
 
   isLast = computed(() => {
-    const total = this.locationService.getAllLocation().length;
-    return this.housingLocationId() === total - 1;
+    const locations = this.locations();
+    const lastLocation = locations[locations.length - 1];
+    return this.housingLocationId() === (lastLocation?.id ?? -1);
   });
 
   ngOnInit() {

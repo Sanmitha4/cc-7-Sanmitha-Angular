@@ -39,7 +39,7 @@
         [housingLocation]="housingLocation"
         [mode]="mode()"
         [isSelected]="housingLocation.selected ?? false"
-        (onLocationClick)="handleLocationClick(housingLocation)"
+        (onLocationClick)="handleLocationClick($event)"
       />
     } @empty {
       <p>No locations found.</p>
