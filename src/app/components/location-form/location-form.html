@@ -1,14 +1,15 @@
 <div class="overlay">
   <div class="panel" [class.show-panel]="shouldShowPanel()">
     <button class="close-btn" (click)="hidePanel()">❌ </button>
-    <div> 
-        <h2>{{ panelTitle() }}</h2>
-        <app-forms-demo
-          [locationToEdit]="locationToEdit()"
-          [editLocationId]="editLocationId()"
-          (locationSaved)="hidePanel(true)"
-        ></app-forms-demo>
-        
+    <div class="panel-content">
+      <h2 class="panel-title">{{ panelTitle() }}</h2>
+      <p class="panel-subtitle">Update the fields and save to keep your housing list up to date.</p>
+
+      <app-forms-demo
+        [locationToEdit]="locationToEdit()"
+        [editLocationId]="editLocationId()"
+        (locationSaved)="hidePanel(true)"
+      ></app-forms-demo>
     </div>
   </div>
 </div>
