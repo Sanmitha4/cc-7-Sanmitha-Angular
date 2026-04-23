@@ -1,12 +1,12 @@
 import { Component, inject, signal, computed } from '@angular/core';
 import { Injectable, InjectionToken } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { LocationService } from '../../services/location-service';
 import { HousingLocationInfo } from '../../models/housing-location-info';
 
 @Component({
   selector: 'app-location-details',
-  imports: [],
+  imports: [RouterOutlet],
   templateUrl: './location-details.html',
   styleUrl: './location-details.css',
 })
@@ -48,6 +48,10 @@ export class LocationDetails {
     if (!this.isLast()) {
       this.router.navigate(['details', this.housingLocationId() + 1]);
     }
+  }
+
+  handleEdit() {
+    this.router.navigate(['edit'], { relativeTo: this.route });
   }
   //console.log(housingLocationInfo);
   static count = 0;

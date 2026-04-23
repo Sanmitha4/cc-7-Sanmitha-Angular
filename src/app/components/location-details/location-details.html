@@ -1,4 +1,6 @@
 <article>
+  <router-outlet></router-outlet>
+
   <img
     class="listing-photo"
     [src]="location?.photo"
@@ -22,5 +24,6 @@
     <button class="nav-btn" (click)="handlePrev()" [disabled]="isFirst()">Previous</button>
 
     <button class="nav-btn" (click)="handleNext()" [disabled]="isLast()">Next</button>
+    <button class="nav-btn" type="button" (click)="handleEdit()">Edit</button>
   </div>
 </article>

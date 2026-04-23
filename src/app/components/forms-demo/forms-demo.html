@@ -39,5 +39,5 @@
     <input type="checkbox" formControlName="laundry" /> Laundry available
   </label>
 
-  <button type="submit" [disabled]="locationForm.invalid">Add location</button>
+  <button type="submit" [disabled]="locationForm.invalid">{{ submitLabel() }}</button>
 </form>

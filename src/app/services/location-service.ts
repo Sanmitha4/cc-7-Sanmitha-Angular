@@ -145,6 +145,26 @@ export class LocationService {
   
   }
 
+  updateLocation(id: number, updatedLocation: Omit<HousingLocationInfo, 'id'>): boolean {
+    let hasUpdated = false;
+
+    this.locations.update((list) =>
+      list.map((location) => {
+        if (location.id !== id) {
+          return location;
+        }
+
+        hasUpdated = true;
+        return {
+          id,
+          ...updatedLocation,
+        };
+      }),
+    );
+
+    return hasUpdated;
+  }
+
   private historyStack: HousingLocationInfo[][] = [];
 
   private deletedLocationList(

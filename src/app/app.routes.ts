@@ -30,6 +30,13 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./components/location-details/location-details').then((m) => m.LocationDetails),
     title: 'Home details',
+    children: [
+      {
+        path: 'edit',
+        component: LocationForm,
+        title: 'Edit Location',
+      },
+    ],
   },
 
   {

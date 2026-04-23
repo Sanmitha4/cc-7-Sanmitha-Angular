@@ -1,10 +1,11 @@
-import { Component, inject, output } from '@angular/core';
+import { Component, effect, inject, input, output, computed } from '@angular/core';
 import {
   ReactiveFormsModule,
   FormBuilder,
   Validators,
 } from '@angular/forms';
 import { LocationService } from '../../services/location-service';
+import { HousingLocationInfo } from '../../models/housing-location-info';
 
 @Component({
   selector: 'app-forms-demo',
@@ -15,6 +16,9 @@ import { LocationService } from '../../services/location-service';
 export class FormsDemo {
   private readonly formBuilder = inject(FormBuilder);
   private readonly locationService = inject(LocationService);
+
+  locationToEdit = input<HousingLocationInfo | null>(null);
+  editLocationId = input<number | null>(null);
 
   locationSaved = output<void>();
 
@@ -31,6 +35,45 @@ export class FormsDemo {
   readonly defaultPhoto =
     'https://angular.dev/assets/images/tutorials/common/bernard-hermant-CLKGGwIBTaY-unsplash.jpg';
 
+  readonly submitLabel = computed(() => (this.editLocationId() === null ? 'Add location' : 'Save changes'));
+
+  constructor() {
+    effect(() => {
+      const location = this.locationToEdit();
+
+      if (!location) {
+        this.locationForm.reset({
+          name: '',
+          city: '',
+          state: '',
+          photo: '',
+          availableUnits: 1,
+          wifi: false,
+          laundry: false,
+        });
+        this.locationForm.markAsPristine();
+        this.locationForm.markAsUntouched();
+        return;
+      }
+
+      this.locationForm.reset({
+        name: location.name,
+        city: location.city,
+        state: location.state,
+        photo: location.photo,
+        availableUnits: location.availableUnits,
+        wifi: location.wifi,
+        laundry: location.laundry,
+      });
+      this.locationForm.markAsPristine();
+      this.locationForm.markAsUntouched();
+    });
+  }
+
+  shouldConfirmClose(): boolean {
+    return this.locationForm.dirty || (this.locationForm.touched && this.locationForm.invalid);
+  }
+
   onSubmit() {
     if (this.locationForm.invalid) {
       this.locationForm.markAllAsTouched();
@@ -39,7 +82,7 @@ export class FormsDemo {
 
     const locationValue = this.locationForm.getRawValue();
 
-    this.locationService.addLocation({
+    const formLocation = {
       name: locationValue.name ?? '',
       city: locationValue.city ?? '',
       state: locationValue.state ?? '',
@@ -47,7 +90,15 @@ export class FormsDemo {
       availableUnits: Number(locationValue.availableUnits ?? 0),
       wifi: !!locationValue.wifi,
       laundry: !!locationValue.laundry,
-    });
+    };
+
+    const locationId = this.editLocationId();
+
+    if (locationId === null) {
+      this.locationService.addLocation(formLocation);
+    } else {
+      this.locationService.updateLocation(locationId, formLocation);
+    }
 
     this.locationForm.reset({
       name: '',
@@ -58,6 +109,8 @@ export class FormsDemo {
       wifi: false,
       laundry: false,
     });
+    this.locationForm.markAsPristine();
+    this.locationForm.markAsUntouched();
 
     this.locationSaved.emit();
   }

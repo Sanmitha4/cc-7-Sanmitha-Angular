@@ -2,8 +2,13 @@
   <div class="panel" [class.show-panel]="shouldShowPanel()">
     <button class="close-btn" (click)="hidePanel()">❌ </button>
     <div> 
-        <h2>Add/Edit Location</h2>
-        <app-forms-demo (locationSaved)="hidePanel()"></app-forms-demo>
+        <h2>{{ panelTitle() }}</h2>
+        <app-forms-demo
+          [locationToEdit]="locationToEdit()"
+          [editLocationId]="editLocationId()"
+          (locationSaved)="hidePanel(true)"
+        ></app-forms-demo>
+        
     </div>
   </div>
 </div>
