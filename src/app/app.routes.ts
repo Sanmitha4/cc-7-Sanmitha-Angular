@@ -4,45 +4,48 @@ import { LocationDetails } from './components/location-details/location-details'
 import { Counter } from './components/counter/counter';
 import { LinkedSignalDemo } from '@components/linked-signal-demo/linked-signal-demo';
 import { FormsDemo } from '@components/forms-demo/forms-demo';
+import { LocationForm } from '@components/location-form/location-form';
 
 export const routes: Routes = [
   {
-    path:'',
-    redirectTo:'home',
-    pathMatch:'full',
-
+    path: '',
+    redirectTo: 'home',
+    pathMatch: 'full',
   },
   {
-    path: '',
+    path: 'home',
     component: Home,
     title: 'LocationHome',
-    children:[{
-      path:'edit',
-      component: FormsDemo,
-      title:'Home Location'
-    }]
+    children: [
+      {
+        path: 'edit',
+        component: LocationForm,
+        title: 'Edit Location',
+      },
+    ],
   },
   {
     path: 'details/:id',
     //component: LocationDetails,
-    loadComponent:()=>import('./components/location-details/location-details').then((m)=>m.LocationDetails),
+    loadComponent: () =>
+      import('./components/location-details/location-details').then((m) => m.LocationDetails),
     title: 'Home details',
   },
-  
+
   {
     path: 'linked-signals',
-    component:LinkedSignalDemo,
+    component: LinkedSignalDemo,
     title: 'Linked signal demo',
   },
   {
     path: 'counter',
     component: Counter,
-    title: "Counter",
+    title: 'Counter',
   },
   {
     path: 'forms',
     component: FormsDemo,
-    title: "FormsDemo"
-  }
+    title: 'FormsDemo',
+  },
 ];
 //export default routeConfig;

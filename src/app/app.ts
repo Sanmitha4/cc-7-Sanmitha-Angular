@@ -2,11 +2,12 @@ import { Component, inject, signal } from '@angular/core';
 import { Router, RouterOutlet, RouterLinkWithHref } from '@angular/router';
 import { Home } from './components/home/home';
 import { Form } from '@angular/forms';
+import { FormsDemo } from '@components/forms-demo/forms-demo';
 //import { Counter } from "./components/counter/counter";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Home, RouterLinkWithHref],
+  imports: [RouterOutlet, Home, RouterLinkWithHref,],
   templateUrl: './app.html',
   // template: `<h1>Hello {{ title() }}</h1>`,
   styleUrl: './app.css',

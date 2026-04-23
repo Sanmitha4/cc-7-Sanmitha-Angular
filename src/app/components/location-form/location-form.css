@@ -1,0 +1,24 @@
+.overlay {
+  position: fixed;
+  /* top: 0;
+  right:0;
+  height: 100vh;
+  width: 100vw; */
+  inset: 0;
+  background-color: rgb(15, 14, 14);
+}
+
+.panel {
+  position: fixed;
+  right: 0;
+  top:0;
+  height: 100vh;
+  width: 400px;
+  background-color: gray;
+  transform: translateX(100%);
+  transition:transform 0.3s ease;
+}
+
+.show-panel{
+    transform:translateX(0);
+}

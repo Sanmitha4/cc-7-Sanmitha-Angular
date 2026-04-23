@@ -4,6 +4,7 @@
   <form>
     <input type="text" placeholder="Filter by city" />
     <button class="primary" type="button">Search</button>
+     <button class="secondary" type="button" (click)="handleAddLocation()">Add Location</button>
   </form>
   <div class="controls">
     <div>
@@ -30,7 +31,6 @@
         }
       </div>
     }
-    <button class="secondary" type="button" (click)="handleAddLocation()">Add Location</button>
   </div>
 
   <section class="results">

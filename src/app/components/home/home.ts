@@ -107,16 +107,17 @@ export class Home {
   }
 
   handleAddLocation() {
-    const aLocation = {
-      id: 0,
-      name: 'A new home',
-      city: 'delhi',
-      state: 'India',
-      photo: `${this.baseUrl}/saru-robert-9rP3mxf8qWI-unsplash.jpg`,
-      availableUnits: 10,
-      wifi: false,
-      laundry: false,
-    };
-    this.locationService.addLocation(aLocation);
+    // const aLocation = {
+    //   id: 0,
+    //   name: 'A new home',
+    //   city: 'delhi',
+    //   state: 'India',
+    //   photo: `${this.baseUrl}/saru-robert-9rP3mxf8qWI-unsplash.jpg`,
+    //   availableUnits: 10,
+    //   wifi: false,
+    //   laundry: false,
+    // };
+    // this.locationService.addLocation(aLocation);
+    this.router.navigate(['edit'],{relativeTo:this.activatedRoute});
   }
 }

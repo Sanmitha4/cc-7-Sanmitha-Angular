@@ -20,6 +20,7 @@ button {
   background: var(--primary-color);
   color: white;
   border-radius: 8px;
+  
 }
 @media (min-width: 500px) and (max-width: 768px) {
   .results {
@@ -67,4 +68,13 @@ button {
 .restore-btn {
   background-color: #41d30c;
   color: #333;
+}
+.secondary {
+  margin-left: 10px; 
+}
+
+form {
+  display: flex;
+  align-items: center; 
+  gap: 10px;          
 }

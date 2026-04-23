@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 
 @Component({
   selector: 'app-location-form',
@@ -6,4 +6,20 @@ import { Component } from '@angular/core';
   templateUrl: './location-form.html',
   styleUrl: './location-form.css',
 })
-export class LocationForm {}
+export class LocationForm {
+  shouldShowPanel=signal<boolean>(false);
+
+  ngOnInit(){
+    this.showPanel()
+  }
+
+
+
+  showPanel(){
+    this.shouldShowPanel.set(true);
+
+  }
+  hidePanel(){
+    this.shouldShowPanel.set(false)
+  }
+}
