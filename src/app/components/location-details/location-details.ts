@@ -1,4 +1,3 @@
-
 import { Component, inject, signal, computed } from '@angular/core';
 import { Injectable, InjectionToken } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -19,7 +18,6 @@ export class LocationDetails {
   location: HousingLocationInfo | undefined;
 
   housingLocationId = signal<number>(-1);
- 
 
   isFirst = computed(() => this.housingLocationId() === 0);
 
