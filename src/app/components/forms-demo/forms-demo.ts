@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, FormBuilder } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, FormBuilder ,Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-forms-demo',
@@ -22,8 +22,9 @@ export class FormsDemo {
   // });
 
   profileForm = this.formBuilder.group({
-    firstName: [''],
+    firstName: ['', [Validators.required, Validators.minLength(6)]],
     lastName: [''],
+    email: ['', Validators.email],
     address: this.formBuilder.group({
       street: [''],
       city: [''],
