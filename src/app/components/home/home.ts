@@ -137,12 +137,15 @@ export class Home {
         laundry: formValue.laundry ?? false,
       };
       this.locationService.addLocation(aLocation);
-      this.addLocationForm.reset({ availableUnits: 0, wifi: false, laundry: false });
-      this.showAddForm.set(false);
+      this.closeAddForm();
     }
   }
 
   cancelAddLocation() {
+    this.closeAddForm();
+  }
+
+  private closeAddForm() {
     this.addLocationForm.reset({ availableUnits: 0, wifi: false, laundry: false });
     this.showAddForm.set(false);
   }
