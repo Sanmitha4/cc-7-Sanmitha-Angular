@@ -2,7 +2,7 @@ import { Component, inject, signal, computed, linkedSignal } from '@angular/core
 import { HousingLocation } from '../housing-location/housing-location';
 import { HousingLocationInfo } from '../../models/housing-location-info';
 import { LocationService, BASE_URL } from '../../services/location-service';
-import { Router, RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet, ActivatedRoute } from '@angular/router';
 import { HousingLocationInfoViewModel } from '../../models/housing-location-info';
 import { FormsDemo } from '@components/forms-demo/forms-demo';
 
@@ -15,6 +15,9 @@ import { FormsDemo } from '@components/forms-demo/forms-demo';
 })
 export class Home {
   locationService: LocationService = inject(LocationService);
+
+  activatedRoute = inject(ActivatedRoute);
+
   router = inject(Router);
   baseUrl: string = inject(BASE_URL);
 
@@ -118,6 +121,6 @@ export class Home {
     //   laundry: false,
     // };
     // this.locationService.addLocation(aLocation);
-    this.router.navigate(['edit'],{relativeTo:this.activatedRoute});
+    this.router.navigate(['edit'], { relativeTo: this.activatedRoute });
   }
 }
