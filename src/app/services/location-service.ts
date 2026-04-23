@@ -132,18 +132,17 @@ export class LocationService {
     return this.locations().find((location) => location.id === id);
   }
 
-  addLocation(location: HousingLocationInfo) {
+  addLocation(location: Omit<HousingLocationInfo, 'id'>) {
 
     const currentLocations = this.locations();
+    const maxId = currentLocations.reduce((currentMax, loc) => Math.max(currentMax, loc.id), -1);
     const newLocation = {
       ...location,
-      id: currentLocations.length,
+      id: maxId + 1,
     };
     this.locations.update((list) => [...list, newLocation]);
 
-    // location.id=currentLocations.length;
-    // currentLocations.push(location);
-    // this.locations.set(currentLocations)
+  
   }
 
   private historyStack: HousingLocationInfo[][] = [];

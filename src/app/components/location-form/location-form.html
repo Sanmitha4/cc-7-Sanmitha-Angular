@@ -3,7 +3,7 @@
     <button class="close-btn" (click)="hidePanel()">❌ </button>
     <div> 
         <h2>Add/Edit Location</h2>
-        <app-forms-demo></app-forms-demo>
+        <app-forms-demo (locationSaved)="hidePanel()"></app-forms-demo>
     </div>
   </div>
 </div>
