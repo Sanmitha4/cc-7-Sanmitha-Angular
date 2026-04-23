@@ -16,9 +16,12 @@ export class LocationDetails {
   //id=input.required<number>();
   locationService: LocationService = inject(LocationService);
   locations = this.locationService.getAllLocation();
-  location: HousingLocationInfo | undefined;
 
   housingLocationId = signal<number>(-1);
+
+  currentLocation = computed<HousingLocationInfo | undefined>(() =>
+    this.locationService.getLocationForId(this.housingLocationId()),
+  );
 
   isFirst = computed(() => this.housingLocationId() === 0);
 
@@ -31,7 +34,6 @@ export class LocationDetails {
   ngOnInit() {
     this.route.params.subscribe((params) => {
       this.housingLocationId.set(Number(params['id']));
-      this.location = this.locationService.getLocationForId(this.housingLocationId());
     });
   }
   ngAfterViewInit() {
