@@ -29,9 +29,7 @@ export class LocationForm {
     return this.locationService.getLocationForId(id) ?? null;
   });
 
-  panelTitle = computed(() =>
-    this.editLocationId() === null ? 'Add Location' : 'Edit Location',
-  );
+  panelTitle = computed(() => (this.editLocationId() === null ? 'Add Location' : 'Edit Location'));
 
   ngOnInit() {
     const routeId =
@@ -67,6 +65,8 @@ export class LocationForm {
       return true;
     }
 
-    return confirm('Your form has unsaved or incomplete changes. Do you want to leave without saving?');
+    return confirm(
+      'Your form has unsaved or incomplete changes. Do you want to leave without saving?',
+    );
   }
 }

@@ -1,4 +1,4 @@
-import { Component, effect, inject, input, output, computed } from '@angular/core';
+import { Component, effect, inject, input, output, computed, InjectionToken } from '@angular/core';
 import {
   ReactiveFormsModule,
   FormBuilder,
@@ -7,6 +7,10 @@ import {
 import { LocationService } from '../../services/location-service';
 import { HousingLocationInfo } from '../../models/housing-location-info';
 
+export const BASE_URL = new InjectionToken<string>('base url', {
+  providedIn: 'root',
+  factory: () => 'https://angular.dev/assets/images/tutorials/common',
+});
 @Component({
   selector: 'app-forms-demo',
   imports: [ReactiveFormsModule],
@@ -22,8 +26,10 @@ export class FormsDemo {
 
   locationSaved = output<void>();
 
+  private readonly baseUrl = inject(BASE_URL);
+
   locationForm = this.formBuilder.group({
-    name: ['', [Validators.required, Validators.minLength(3)]],
+    name: ['', [Validators.required, Validators.minLength(5)]],
     city: ['', [Validators.required]],
     state: ['', [Validators.required]],
     photo: [''],
@@ -32,8 +38,10 @@ export class FormsDemo {
     laundry: [false],
   });
 
-  readonly defaultPhoto =
-    'https://angular.dev/assets/images/tutorials/common/bernard-hermant-CLKGGwIBTaY-unsplash.jpg';
+  readonly defaultPhoto= `${this.baseUrl}/saru-robert-9rP3mxf8qWI-unsplash.jpg`;
+
+  // readonly defaultPhoto =
+  //   'https://angular.dev/assets/images/tutorials/common/bernard-hermant-CLKGGwIBTaY-unsplash.jpg';
 
   readonly submitLabel = computed(() => (this.editLocationId() === null ? 'Add location' : 'Save changes'));
 
