@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormsDemo } from '../forms-demo/forms-demo';
 import { LocationService } from '../../services/location-service';
 import { HousingLocationInfo } from '../../models/housing-location-info';
+import { hidden } from '@angular/forms/signals';
 @Component({
   selector: 'app-location-form',
   imports: [FormsDemo],
@@ -38,6 +39,7 @@ export class LocationForm {
   }
   showPanel() {
     this.shouldShowPanel.set(true);
+    document.body.style.overflow='hidden';
   }
 
   hidePanel(forceClose = false) {
