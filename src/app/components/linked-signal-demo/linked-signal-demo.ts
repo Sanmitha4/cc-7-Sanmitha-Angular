@@ -6,7 +6,7 @@ import {
   ChangeDetectionStrategy,
   linkedSignal,
 } from '@angular/core';
-import { ShippingSelection } from "@components/shipping-selection/shipping-selection";
+import { ShippingSelection } from '@components/shipping-selection/shipping-selection';
 
 @Component({
   selector: 'app-root',
@@ -17,7 +17,7 @@ import { ShippingSelection } from "@components/shipping-selection/shipping-selec
 })
 export class LinkedSignalDemo {
   userStatus = signal<'online' | 'away' | 'offline'>('offline');
-  notificationPreference = linkedSignal<boolean>(()=>this.userStatus() === 'online');
+  notificationPreference = linkedSignal<boolean>(() => this.userStatus() === 'online');
 
   constructor() {
     effect(() => {

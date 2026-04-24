@@ -1,9 +1,5 @@
 import { Component, effect, inject, input, output, computed, InjectionToken } from '@angular/core';
-import {
-  ReactiveFormsModule,
-  FormBuilder,
-  Validators,
-} from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { LocationService } from '../../services/location-service';
 import { HousingLocationInfo } from '../../models/housing-location-info';
 
@@ -38,12 +34,14 @@ export class FormsDemo {
     laundry: [false],
   });
 
-  readonly defaultPhoto= `${this.baseUrl}/saru-robert-9rP3mxf8qWI-unsplash.jpg`;
+  readonly defaultPhoto = `${this.baseUrl}/saru-robert-9rP3mxf8qWI-unsplash.jpg`;
 
   // readonly defaultPhoto =
   //   'https://angular.dev/assets/images/tutorials/common/bernard-hermant-CLKGGwIBTaY-unsplash.jpg';
 
-  readonly submitLabel = computed(() => (this.editLocationId() === null ? 'Add location' : 'Save changes'));
+  readonly submitLabel = computed(() =>
+    this.editLocationId() === null ? 'Add location' : 'Save changes',
+  );
 
   constructor() {
     effect(() => {

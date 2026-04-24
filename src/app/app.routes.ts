@@ -55,4 +55,3 @@ export const routes: Routes = [
     title: 'FormsDemo',
   },
 ];
-//export default routeConfig;

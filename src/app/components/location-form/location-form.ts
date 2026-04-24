@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormsDemo } from '../forms-demo/forms-demo';
 import { LocationService } from '../../services/location-service';
 import { HousingLocationInfo } from '../../models/housing-location-info';
-
 @Component({
   selector: 'app-location-form',
   imports: [FormsDemo],
@@ -35,10 +34,8 @@ export class LocationForm {
     const routeId =
       this.route.snapshot.paramMap.get('id') ?? this.route.parent?.snapshot.paramMap.get('id');
     this.editLocationId.set(routeId === null ? null : Number(routeId));
-
     this.showPanel();
   }
-
   showPanel() {
     this.shouldShowPanel.set(true);
   }
@@ -47,16 +44,13 @@ export class LocationForm {
     if (!forceClose && !this.canCloseForm()) {
       return;
     }
-
     this.shouldShowPanel.set(false);
-
     const editId = this.editLocationId();
     if (editId === null) {
       this.router.navigate(['home']);
       return;
     }
-
-    this.router.navigate(['details', editId]);
+    return this.router.navigate(['details', editId]);
   }
 
   private canCloseForm(): boolean {
@@ -64,9 +58,6 @@ export class LocationForm {
     if (!childForm || !childForm.shouldConfirmClose()) {
       return true;
     }
-
-    return confirm(
-      'Your form has unsaved or incomplete changes. Do you want to leave without saving?',
-    );
+    return confirm('Your form has some incomplete changes.Do you want to still exit?');
   }
 }

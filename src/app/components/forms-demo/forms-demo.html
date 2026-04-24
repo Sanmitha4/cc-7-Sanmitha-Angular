@@ -31,13 +31,9 @@
     <p class="error">Available units must be 0 or more.</p>
   }
 
-  <label>
-    <input type="checkbox" formControlName="wifi" /> Wifi available
-  </label>
+  <label> <input type="checkbox" formControlName="wifi" /> Wifi available </label>
 
-  <label>
-    <input type="checkbox" formControlName="laundry" /> Laundry available
-  </label>
+  <label> <input type="checkbox" formControlName="laundry" /> Laundry available </label>
 
   <button type="submit" [disabled]="locationForm.invalid">{{ submitLabel() }}</button>
 </form>

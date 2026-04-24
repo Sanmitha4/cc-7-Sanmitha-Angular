@@ -11,7 +11,6 @@ import { FormsDemo } from '@components/forms-demo/forms-demo';
   imports: [HousingLocation, RouterOutlet],
   templateUrl: './home.html',
   styleUrl: './home.css',
-  
 })
 export class Home {
   locationService: LocationService = inject(LocationService);
@@ -106,7 +105,6 @@ export class Home {
   }
 
   handleAddLocation() {
-    
     this.router.navigate(['edit'], { relativeTo: this.activatedRoute });
   }
 }

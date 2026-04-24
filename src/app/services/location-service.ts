@@ -20,7 +20,7 @@ export class LocationService {
   private readonly baseUrl = inject(BASE_URL);
 
   //readonly
-  private  housingLocationList: HousingLocationInfo[] = [
+  private housingLocationList: HousingLocationInfo[] = [
     {
       id: 0,
       name: 'Acme Fresh Start Housing',
@@ -133,7 +133,6 @@ export class LocationService {
   }
 
   addLocation(location: Omit<HousingLocationInfo, 'id'>) {
-
     const currentLocations = this.locations();
     const maxId = currentLocations.reduce((currentMax, loc) => Math.max(currentMax, loc.id), -1);
     const newLocation = {
@@ -141,8 +140,6 @@ export class LocationService {
       id: maxId + 1,
     };
     this.locations.update((list) => [...list, newLocation]);
-
-  
   }
 
   updateLocation(id: number, updatedLocation: Omit<HousingLocationInfo, 'id'>): boolean {

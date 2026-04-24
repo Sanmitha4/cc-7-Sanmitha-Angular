@@ -3,26 +3,17 @@ import { Router, RouterOutlet, RouterLinkWithHref } from '@angular/router';
 import { Home } from './components/home/home';
 import { Form } from '@angular/forms';
 import { FormsDemo } from '@components/forms-demo/forms-demo';
-//import { Counter } from "./components/counter/counter";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Home, RouterLinkWithHref,],
+  imports: [RouterOutlet, RouterLinkWithHref],
   templateUrl: './app.html',
-  // template: `<h1>Hello {{ title() }}</h1>`,
   styleUrl: './app.css',
 })
 export class App {
   protected readonly title = signal('property-app');
-  router = inject(Router)
-  // protected readonly title = 'property-app';
+  router = inject(Router);
   ngOnInit() {
     console.log('App component initialized');
-    // this.title.set('property app reloaded')
   }
-
-  // handleHome(event: Event) {
-  //   console.log("Back to home")
-  //   this.router.navigate([''])
-  // }
 }
