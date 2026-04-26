@@ -80,6 +80,8 @@ export class FormsDemo {
     return this.locationForm.dirty || (this.locationForm.touched && this.locationForm.invalid);
   }
 
+  
+
   onSubmit() {
     if (this.locationForm.invalid) {
       this.locationForm.markAllAsTouched();

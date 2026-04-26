@@ -1,4 +1,4 @@
-import { Component, signal, inject, viewChild, computed } from '@angular/core';
+import { Component, signal, inject, viewChild, computed, HostListener } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsDemo } from '../forms-demo/forms-demo';
 import { LocationService } from '../../services/location-service';
@@ -39,14 +39,21 @@ export class LocationForm {
   }
   showPanel() {
     this.shouldShowPanel.set(true);
-    document.body.style.overflow='hidden';
+    document.body.style.overflow = 'hidden';
   }
-
+  @HostListener('document:keydown.escape')
+  handleEscape() {
+    if (this.shouldShowPanel()) {
+      this.hidePanel();
+    }
+  }
   hidePanel(forceClose = false) {
     if (!forceClose && !this.canCloseForm()) {
       return;
     }
     this.shouldShowPanel.set(false);
+    //document.body.style.overflow = 'auto';
+
     const editId = this.editLocationId();
     if (editId === null) {
       this.router.navigate(['home']);
@@ -60,6 +67,7 @@ export class LocationForm {
     if (!childForm || !childForm.shouldConfirmClose()) {
       return true;
     }
-    return confirm('Your form has some incomplete changes.Do you want to still exit?');
+
+    return confirm('Your form has some incomplete changes. Do you want to still exit?');
   }
 }
