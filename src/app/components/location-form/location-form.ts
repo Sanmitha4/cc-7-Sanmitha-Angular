@@ -4,9 +4,11 @@ import { FormsDemo } from '../forms-demo/forms-demo';
 import { LocationService } from '../../services/location-service';
 import { HousingLocationInfo } from '../../models/housing-location-info';
 import { hidden } from '@angular/forms/signals';
+import { CdkTrapFocus } from '@angular/cdk/a11y';
 @Component({
   selector: 'app-location-form',
-  imports: [FormsDemo],
+  standalone: true,
+  imports: [FormsDemo, CdkTrapFocus],
   templateUrl: './location-form.html',
   styleUrl: './location-form.css',
 })
@@ -52,7 +54,7 @@ export class LocationForm {
       return;
     }
     this.shouldShowPanel.set(false);
-    //document.body.style.overflow = 'auto';
+    document.body.style.overflow = 'auto';
 
     const editId = this.editLocationId();
     if (editId === null) {

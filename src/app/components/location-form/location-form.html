@@ -1,4 +1,13 @@
 <div class="overlay">
+  <div 
+    class="panel" 
+    [class.show-panel]="shouldShowPanel()" 
+    cdkFocusTrap 
+    cdkFocusTrapAutoCapture
+    role="dialog" 
+    aria-modal="true"
+  >
+   <button class="close-btn" (click)="hidePanel()">X</button>
   <div class="panel" [class.show-panel]="shouldShowPanel()">
     <button class="close-btn" (click)="hidePanel()">X</button>
     <div class="panel-content">
@@ -12,4 +21,5 @@
       ></app-forms-demo>
     </div>
   </div>
-</div>
+  </div>
+
