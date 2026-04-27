@@ -263,13 +263,13 @@ export class FormsDemo {
   readonly submitLabel = computed(() =>
     this.editLocationId() === null ? 'Add location' : 'Save changes',
   );
+  ngOnInit(){
+    const location = this.locationToEdit();
+    location ? this.locationForm.patchValue(location) : this.resetForm();
 
-  constructor() {
-    effect(() => {
-      const location = this.locationToEdit();
-      location ? this.locationForm.patchValue(location) : this.resetForm();
-    });
   }
+
+  
 
   private resetForm(): void {
     this.locationForm.reset(this.initial_details);
