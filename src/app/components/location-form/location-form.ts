@@ -35,6 +35,20 @@ export class LocationForm {
   });
 
   panelTitle = computed(() => (this.editLocationId() === null ? 'Add Location' : 'Edit Location'));
+  private originalOverflow: string = '';
+
+  private setBodyOverflow(hidden: boolean): void {
+    if (hidden) {
+      // ONLY save if we haven't already saved a value (avoid overwriting 'hidden')
+      if (this.originalOverflow === '') {
+        this.originalOverflow = window.getComputedStyle(document.body).overflow;
+      }
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = this.originalOverflow;
+      this.originalOverflow = '';
+    }
+  }
 
   ngOnInit() {
     const routeId =
@@ -44,7 +58,7 @@ export class LocationForm {
   }
   showPanel() {
     this.shouldShowPanel.set(true);
-    document.body.style.overflow = 'hidden';
+    this.setBodyOverflow(true);
   }
 
   handleEscape() {
@@ -58,7 +72,7 @@ export class LocationForm {
       return;
     }
     this.shouldShowPanel.set(false);
-    document.body.style.overflow = 'auto';
+    this.setBodyOverflow(false);
 
     const editId = this.editLocationId();
     if (editId === null) {
