@@ -147,7 +147,7 @@
 //   locationSaved = output<void>();
 
 //   private readonly INITIAL_STATE = {
-//     name: '', city: '', state: '', photo: '', 
+//     name: '', city: '', state: '', photo: '',
 //     availableUnits: 1, wifi: false, laundry: false
 //   };
 
@@ -163,7 +163,7 @@
 
 //   readonly defaultPhoto = `${this.baseUrl}/saru-robert-9rP3mxf8qWI-unsplash.jpg`;
 
-//   readonly submitLabel = computed(() => 
+//   readonly submitLabel = computed(() =>
 //     this.editLocationId() === null ? 'Add location' : 'Save changes'
 //   );
 
@@ -191,8 +191,8 @@
 //     const formLocation = this.getFormData();
 //     const id = this.editLocationId();
 
-//     id === null 
-//       ? this.locationService.addLocation(formLocation) 
+//     id === null
+//       ? this.locationService.addLocation(formLocation)
 //       : this.locationService.updateLocation(id, formLocation);
 
 //     this.resetForm();
@@ -239,8 +239,13 @@ export class FormsDemo {
   locationSaved = output<void>();
 
   private readonly initial_details = {
-    name: '', city: '', state: '', photo: '', 
-    availableUnits: 1, wifi: false, laundry: false
+    name: '',
+    city: '',
+    state: '',
+    photo: '',
+    availableUnits: 1,
+    wifi: false,
+    laundry: false,
   };
 
   locationForm = this.formBuilder.group({
@@ -255,8 +260,8 @@ export class FormsDemo {
 
   readonly defaultPhoto = `${this.baseUrl}/saru-robert-9rP3mxf8qWI-unsplash.jpg`;
 
-  readonly submitLabel = computed(() => 
-    this.editLocationId() === null ? 'Add location' : 'Save changes'
+  readonly submitLabel = computed(() =>
+    this.editLocationId() === null ? 'Add location' : 'Save changes',
   );
 
   constructor() {
@@ -283,8 +288,8 @@ export class FormsDemo {
     const formLocation = this.getFormData();
     const id = this.editLocationId();
 
-    id === null 
-      ? this.locationService.addLocation(formLocation) 
+    id === null
+      ? this.locationService.addLocation(formLocation)
       : this.locationService.updateLocation(id, formLocation);
 
     this.resetForm();
@@ -292,7 +297,7 @@ export class FormsDemo {
   }
 
   private getFormData() {
-    const h= this.locationForm.getRawValue();
+    const h = this.locationForm.getRawValue();
     return {
       name: h.name ?? '',
       city: h.city ?? '',
