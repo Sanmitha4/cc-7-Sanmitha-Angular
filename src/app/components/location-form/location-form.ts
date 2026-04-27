@@ -43,12 +43,16 @@ export class LocationForm {
     this.shouldShowPanel.set(true);
     document.body.style.overflow = 'hidden';
   }
+
+
   @HostListener('document:keydown.escape')
   handleEscape() {
     if (this.shouldShowPanel()) {
       this.hidePanel();
     }
   }
+
+  
   hidePanel(forceClose = false) {
     if (!forceClose && !this.canCloseForm()) {
       return;
