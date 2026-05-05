@@ -1,83 +1,29 @@
-<!-- <form [formGroup]="locationForm" (ngSubmit)="onSubmit()">
-  @let name = locationForm.controls.name;
-  @let city = locationForm.controls.city;
-  @let state = locationForm.controls.state;
-  @let units = locationForm.controls.availableUnits;
+<form>
+  <label for="name">Name: </label>
+  <input id="name" type="text" [formControl]="name" (change)="handleChange($event)" />
+</form>
+<p>Entered Value ={{ name.value }}</p>
+<button (click)="updateName()">Update name</button>
+<form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+  <label for="first-name">First Name:</label>
+  @let firstName = profileForm.controls.firstName;
+  <input id="first" type="text" formControlName="firstName" />
+  @if (firstName.touched && !firstName.valid) {
+    <p class="error">You must enter a proper name with atleast 6 chars in length</p>
+    <label for="last-name">Last Name:</label>
+  <input id="last" type="text" formControlName="lastName" />
+  <label for="email">Email:</label>
+  <input id="email" type="text" formControlName="email" />
 
-  <label for="location-name">Location Name:</label>
-  <input id="location-name" type="text" formControlName="name" />
-  @if (name.touched && name.invalid) {
-    <p class="error">Enter a location name with at least 3 characters.</p>
-  }
-
-  <label for="city">City:</label>
-  <input id="city" type="text" formControlName="city" />
-  @if (city.touched && city.invalid) {
-    <p class="error">City is required.</p>
-  }
-
-  <label for="state">State:</label>
-  <input id="state" type="text" formControlName="state" />
-  @if (state.touched && state.invalid) {
-    <p class="error">State is required.</p>
-  }
-
-  <label for="photo">Photo URL (optional):</label>
-  <input id="photo" type="text" formControlName="photo" />
-
-  <label for="available-units">Available Units:</label>
-  <input id="available-units" type="number" min="0" formControlName="availableUnits" />
-  @if (units.touched && units.invalid) {
-    <p class="error">Available units must be 0 or more.</p>
-  }
-
-  <label> <input type="checkbox" formControlName="wifi" /> Wifi available </label>
-
-  <label> <input type="checkbox" formControlName="laundry" /> Laundry available </label>
-
-  <button type="submit" [disabled]="locationForm.invalid">{{ submitLabel() }}</button>
-</form> -->
-
-
-<form [formGroup]="locationForm" (ngSubmit)="onSubmit()">
-  @let name = locationForm.controls.name;
-  @let city = locationForm.controls.city;
-  @let state = locationForm.controls.state;
-  @let units = locationForm.controls.availableUnits;
-
-  <label for="location-name">Location Name:</label>
-  <input id="location-name" type="text" formControlName="name" autocomplete="name" />
-  @if (name.touched && name.invalid) {
-    <p class="error">Enter a location name with at least 5 characters.</p>
-  }
-
-  <label for="city">City:</label>
-  <input id="city" type="text" formControlName="city" autocomplete="address-level2" />
-  @if (city.touched && city.invalid) {
-    <p class="error">City is required.</p>
-  }
-
-  <label for="state">State:</label>
-  <input id="state" type="text" formControlName="state" autocomplete="address-level1" />
-  @if (state.touched && state.invalid) {
-    <p class="error">State is required.</p>
-  }
-
-  <label for="photo">Photo URL (optional):</label>
-  <input id="photo" type="text" formControlName="photo" />
-
-  <label for="available-units">Available Units:</label>
-  <input id="available-units" type="number" min="0" formControlName="availableUnits" />
-  @if (units.touched && units.invalid) {
-    <p class="error">Available units must be 0 or more.</p>
-  }
-
-  <div class="checkbox-group">
-    <label> <input type="checkbox" formControlName="wifi" /> Wifi available </label>
-    <label> <input type="checkbox" formControlName="laundry" /> Laundry available </label>
+  <div formGroupName="address">
+    <h2>Address</h2>
+    <label for="street">Street:</label>
+    <input id="street" type="text" formControlName="street" />
+    <label for="city">City:</label>
+    <input id="city" type="text" formControlName="city" />
+    <label for="state">State:</label>
+    <input id="state" type="text" formControlName="state" />
   </div>
 
-  <button type="submit" [disabled]="locationForm.invalid || !locationForm.dirty">
-    {{ submitLabel() }}
-  </button>
-</form>
+  <button type="submit" [disabled]="!profileForm.valid">Submit</button>
+  <button (click)="updateName()">Update partially</button>
