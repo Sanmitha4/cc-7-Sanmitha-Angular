@@ -5,13 +5,17 @@ import { toSignal, toObservable } from '@angular/core/rxjs-interop';
 
 import { HousingLocation } from '../housing-location/housing-location';
 import { SearchBarComponent } from '../search-bar/search-bar';
+import { CardLayoutComponent } from '../card-layout/card-layout';
 import { LocationService, BASE_URL } from '../../services/location-service';
-import { HousingLocationInfo, HousingLocationInfoViewModel } from '../../models/housing-location-info';
+import {
+  HousingLocationInfo,
+  HousingLocationInfoViewModel,
+} from '../../models/housing-location-info';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [SearchBarComponent, HousingLocation, RouterOutlet],
+  imports: [SearchBarComponent, HousingLocation, CardLayoutComponent, RouterOutlet],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
@@ -26,14 +30,15 @@ export class Home {
   /*combine the search term with a 'Live' observable of the service data.
    */
   private readonly rawLocations = toSignal(
-    combineLatest([   //[Housingloactions,terms]
+    combineLatest([
+      //[Housingloactions,terms]
       toObservable(this.locationService.locations), // Listen for Add/Delete/Update
-      this.searchTerms$.pipe(startWith(''),debounceTime(300))         // Listen for Search typing
+      this.searchTerms$.pipe(startWith(''), debounceTime(300)), // Listen for Search typing
     ]).pipe(
       // Whenever either changes, re-run the search/filter logic
-      switchMap(([_, term]) => this.locationService.searchLocationsByCity(term))
+      switchMap(([_, term]) => this.locationService.searchLocationsByCity(term)),
     ),
-    { initialValue: [] }
+    { initialValue: [] },
   );
 
   onSearch(term: string) {
@@ -44,16 +49,16 @@ export class Home {
   selectedIds = signal<Set<number>>(new Set());
   selectionCount = computed(() => this.selectedIds().size);
 
-  // linkedSignal ensures that even if the search results change, 
+  // linkedSignal ensures that even if the search results change,
   // we can still manually toggle 'selected' status in Edit mode.
   locationsToDisplay = linkedSignal<HousingLocationInfo[], HousingLocationInfoViewModel[]>({
-    source: () => this.rawLocations() ?? [], 
+    source: () => this.rawLocations() ?? [],
 
     computation: (newLocations, prevValue) => {
       const prevViewModels = (prevValue?.value as HousingLocationInfoViewModel[]) ?? [];
-      
+
       return newLocations.map((hl) => {
-        const matched = prevViewModels.find(p => p.id === hl.id);
+        const matched = prevViewModels.find((p) => p.id === hl.id);
         return {
           ...hl,
           selected: matched?.selected ?? false,
@@ -66,9 +71,11 @@ export class Home {
   handleLocationClick(housingLocationInfo: HousingLocationInfo) {
     if (this.mode() === 'normal') {
       this.router.navigate(['details', housingLocationInfo.id]);
-      
+
       // Clear selections on navigation
-      this.locationsToDisplay.set(this.locationsToDisplay().map(vm => ({...vm, selected: false})));
+      this.locationsToDisplay.set(
+        this.locationsToDisplay().map((vm) => ({ ...vm, selected: false })),
+      );
       this.selectedIds.set(new Set());
     } else {
       // Toggle selection in Edit mode
@@ -83,9 +90,9 @@ export class Home {
 
       // Update the view model signal directly to show the checkmark immediately
       this.locationsToDisplay.set(
-        this.locationsToDisplay().map(vm => 
-          vm.id === housingLocationInfo.id ? { ...vm, selected: nextSelectedIds.has(vm.id) } : vm
-        )
+        this.locationsToDisplay().map((vm) =>
+          vm.id === housingLocationInfo.id ? { ...vm, selected: nextSelectedIds.has(vm.id) } : vm,
+        ),
       );
     }
   }
@@ -96,7 +103,9 @@ export class Home {
     if (!checked) {
       this.selectedIds.set(new Set());
       // Reset visual checkmarks
-      this.locationsToDisplay.set(this.locationsToDisplay().map(vm => ({...vm, selected: false})));
+      this.locationsToDisplay.set(
+        this.locationsToDisplay().map((vm) => ({ ...vm, selected: false })),
+      );
     }
   }
 
@@ -120,8 +129,6 @@ export class Home {
     this.router.navigate(['edit'], { relativeTo: this.activatedRoute });
   }
 }
-
-
 
 // import { Component, inject, signal, computed, linkedSignal } from '@angular/core';
 // import { HousingLocation } from '../housing-location/housing-location';

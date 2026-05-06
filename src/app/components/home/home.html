@@ -3,12 +3,10 @@
 <section>
   <form>
     <app-search-bar (searchChanged)="onSearch($event)"></app-search-bar>
-    
-    <button class="secondary" type="button" (click)="handleAddLocation()">
-      Add Location
-    </button>
+
+    <button class="secondary" type="button" (click)="handleAddLocation()">Add Location</button>
   </form>
-  
+
   <div class="controls">
     <div>
       <label>
@@ -50,12 +48,14 @@
   </section> -->
   <section class="results">
     @for (housingLocation of locationsToDisplay(); track housingLocation.id) {
-      <app-housing-location
-        [housingLocation]="housingLocation"
-        [mode]="mode()"
-        [isSelected]="housingLocation.selected ?? false"
-        (onLocationClick)="handleLocationClick($event)"
-      />
+      <app-card-layout>
+        <app-housing-location
+          [housingLocation]="housingLocation"
+          [mode]="mode()"
+          [isSelected]="housingLocation.selected ?? false"
+          (onLocationClick)="handleLocationClick($event)"
+        />
+      </app-card-layout>
     } @empty {
       <p>No locations found.</p>
     }
