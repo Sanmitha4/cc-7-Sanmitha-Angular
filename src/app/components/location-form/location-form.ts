@@ -99,11 +99,12 @@ export class LocationForm implements OnInit {
       this.hidePanel();
     }
   }
+  private setBodyOverflow(shouldHide: boolean) {
+    document.body.style.overflow = shouldHide ? 'hidden' : 'auto';
+  }
 
   // 4. Dirty/Invalid check for the Escape/Close logic
-  shouldConfirmClose(): boolean {
-    return this.locationForm.dirty || (this.locationForm.touched && this.locationForm.invalid);
-  }
+ 
 
   hidePanel(forceClose = false) {
     if (!forceClose && !this.canCloseForm()) {
@@ -119,6 +120,10 @@ export class LocationForm implements OnInit {
     } else {
       this.router.navigate(['details', editId]);
     }
+  }
+
+  shouldConfirmClose(): boolean {
+    return this.locationForm.dirty || (this.locationForm.touched && this.locationForm.invalid);
   }
 
   private canCloseForm(): boolean {
