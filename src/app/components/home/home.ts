@@ -1,6 +1,6 @@
 import { Component, inject, signal, computed, linkedSignal } from '@angular/core';
 import { Router, RouterOutlet, ActivatedRoute } from '@angular/router';
-import { Subject, switchMap, startWith, combineLatest } from 'rxjs';
+import { Subject, switchMap, startWith, combineLatest, debounceTime } from 'rxjs';
 import { toSignal, toObservable } from '@angular/core/rxjs-interop';
 
 import { HousingLocation } from '../housing-location/housing-location';
@@ -21,16 +21,14 @@ export class Home {
   private readonly router = inject(Router);
   readonly baseUrl = inject(BASE_URL);
 
-  // --- 1. SEARCH & DATA STREAMS ---
   private readonly searchTerms$ = new Subject<string>();
 
-  /** * This is the fix for the 'Add' functionality. 
-   * We combine the search term with a 'Live' observable of the service data.
+  /*combine the search term with a 'Live' observable of the service data.
    */
   private readonly rawLocations = toSignal(
-    combineLatest([
+    combineLatest([   //[Housingloactions,terms]
       toObservable(this.locationService.locations), // Listen for Add/Delete/Update
-      this.searchTerms$.pipe(startWith(''))         // Listen for Search typing
+      this.searchTerms$.pipe(startWith(''),debounceTime(300))         // Listen for Search typing
     ]).pipe(
       // Whenever either changes, re-run the search/filter logic
       switchMap(([_, term]) => this.locationService.searchLocationsByCity(term))
@@ -42,7 +40,6 @@ export class Home {
     this.searchTerms$.next(term);
   }
 
-  // --- 2. SELECTION & DISPLAY LOGIC ---
   mode = signal<'normal' | 'edit'>('normal');
   selectedIds = signal<Set<number>>(new Set());
   selectionCount = computed(() => this.selectedIds().size);

@@ -1,5 +1,6 @@
 import { Component, OnInit, output } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { pairs } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
 
 @Component({
@@ -10,7 +11,6 @@ import { debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
   styleUrl: './search-bar.css'
 })
 export class SearchBarComponent implements OnInit {
-  // Use the modern output API to send data to the parent (Home)
   searchChanged = output<string>();
 
   // This control tracks what the user types
@@ -18,8 +18,8 @@ export class SearchBarComponent implements OnInit {
 
   ngOnInit() {
     this.searchControl.valueChanges.pipe(
-      debounceTime(400),           // 1. Wait for typing to stop
-      distinctUntilChanged(),      // 2. Only emit if value actually changed
+      debounceTime(400),           //  Wait for typing to stop
+      distinctUntilChanged(),      //  Only emit if value actually changed
       // 3. Rule: Emit only if length >= 3 OR if the input is cleared (0)
       filter(val => {
         const text = val ?? '';

@@ -15,7 +15,7 @@
   top: 0;
   height: 100vh;
   width: min(650px, 100vw);
-  background: #f1f5f9; /* Light grey background for the panel itself */
+  background: #f1f5f9; 
   box-shadow: -24px 0 48px rgba(0, 0, 0, 0.2);
   transform: translateX(100%);
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -28,13 +28,12 @@
   transform: translateX(0);
 }
 
-/* 2. THE CONTENT BOX (THE "CARD") */
 .panel-content {
   width: 90%;
   max-width: 520px;
-  margin: 60px auto; /* Centered with space for the close button */
+  margin: 60px auto; 
   padding: 32px;
-  background: #ffffff; /* Pure white for the "Box" */
+  background: #ffffff; 
   border: 1px solid #e2e8f0;
   border-radius: 20px;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
@@ -54,7 +53,6 @@
   text-align: center;
 }
 
-/* 3. FORM STYLING */
 form {
   display: flex;
   flex-direction: column;

@@ -188,7 +188,7 @@ export class LocationService {
     return this.historyStack.length > 0;
   }
   searchLocationsByCity(term: string): Observable<HousingLocationInfo[]> {
-    // We use 'of' to turn the current signal value into an Observable stream
+    //  'of' to turn the current signal value into an Observable stream
     return of(this.locations()).pipe(
       map(list => {
         if (!term.trim()) {

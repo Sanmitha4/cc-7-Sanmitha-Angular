@@ -8,7 +8,7 @@ import { HousingLocationInfo } from '../../models/housing-location-info';
 @Component({
   selector: 'app-location-form',
   standalone: true,
-  // We include ReactiveFormsModule here because the form is now in this component's template
+  // ReactiveFormsModule here because the form is now in this component's template
   imports: [ReactiveFormsModule, CdkTrapFocus],
   templateUrl: './location-form.html',
   styleUrl: './location-form.css',
@@ -104,7 +104,6 @@ export class LocationForm implements OnInit {
   }
 
   // 4. Dirty/Invalid check for the Escape/Close logic
- 
 
   hidePanel(forceClose = false) {
     if (!forceClose && !this.canCloseForm()) {
@@ -156,7 +155,6 @@ export class LocationForm implements OnInit {
     } else {
       this.locationService.updateLocation(id, locationData);
     }
-
     // Success! Close panel and navigate away
     this.hidePanel(true);
   }
