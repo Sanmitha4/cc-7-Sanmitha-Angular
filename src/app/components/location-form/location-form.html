@@ -23,3 +23,73 @@
   </div>
   </div>
  -->
+
+ <div class="overlay">
+  <div 
+    class="panel" 
+    [class.show-panel]="shouldShowPanel()" 
+    cdkFocusTrap 
+    cdkFocusTrapAutoCapture
+    role="dialog" 
+    aria-modal="true"
+  >
+    <button class="close-btn" (click)="hidePanel()" aria-label="Close panel">X</button>
+
+    <div class="panel-content">
+      <h2 class="panel-title">{{ panelTitle() }}</h2>
+      <p class="panel-subtitle">Update the fields and save to keep your housing list up to date.</p>
+
+      <form [formGroup]="locationForm" (ngSubmit)="onSubmit()">
+        
+        @let name = locationForm.controls.name;
+        @let city = locationForm.controls.city;
+        @let state = locationForm.controls.state;
+        @let units = locationForm.controls.availableUnits;
+
+        <label for="location-name">Location Name:</label>
+        <input id="location-name" type="text" formControlName="name" />
+        @if (name.touched && name.invalid) {
+          <p class="error">Enter a location name with at least 3 characters.</p>
+        }
+
+        <label for="city">City:</label>
+        <input id="city" type="text" formControlName="city" />
+        @if (city.touched && city.invalid) {
+          <p class="error">City is required.</p>
+        }
+
+        <label for="state">State:</label>
+        <input id="state" type="text" formControlName="state" />
+        @if (state.touched && state.invalid) {
+          <p class="error">State is required.</p>
+        }
+
+        <label for="photo">Photo URL (optional):</label>
+        <input id="photo" type="text" formControlName="photo" />
+
+        <label for="available-units">Available Units:</label>
+        <input id="available-units" type="number" min="0" formControlName="availableUnits" />
+        @if (units.touched && units.invalid) {
+          <p class="error">Available units must be 0 or more.</p>
+        }
+
+        <div class="checkbox-group">
+          <label> 
+            <input type="checkbox" formControlName="wifi" /> Wifi available 
+          </label>
+          <label> 
+            <input type="checkbox" formControlName="laundry" /> Laundry available 
+          </label>
+        </div>
+
+        <button 
+          type="submit" 
+          class="submit-btn" 
+          [disabled]="locationForm.invalid"
+        >
+          {{ submitLabel() }}
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

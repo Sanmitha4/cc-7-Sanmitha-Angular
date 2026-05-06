@@ -1,11 +1,11 @@
+/* 1. OVERLAY & PANEL BASE */
 .overlay {
   position: fixed;
   inset: 0;
   background-color: rgba(15, 14, 14, 0.45);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   z-index: 1000;
-  cursor: pointer;
   animation: fade-overlay 0.2s ease;
 }
 
@@ -15,70 +15,144 @@
   top: 0;
   height: 100vh;
   width: min(650px, 100vw);
-  background: linear-gradient(180deg, #ffffff 0%, #fafcff 100%);
-  box-shadow: -24px 0 48px rgba(0, 0, 0, 0.25);
+  background: #f1f5f9; /* Light grey background for the panel itself */
+  box-shadow: -24px 0 48px rgba(0, 0, 0, 0.2);
   transform: translateX(100%);
-  transition: transform 0.3s ease;
-  cursor: default;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .show-panel {
   transform: translateX(0);
 }
 
+/* 2. THE CONTENT BOX (THE "CARD") */
 .panel-content {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  width: 90%;
   max-width: 520px;
-  margin: 40px auto;
-  padding: 28px 28px 36px;
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.92);
-  box-shadow: 0 12px 40px rgba(15, 23, 42, 0.08);
+  margin: 60px auto; /* Centered with space for the close button */
+  padding: 32px;
+  background: #ffffff; /* Pure white for the "Box" */
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
 .panel-title {
-  margin: 0;
+  margin: 0 0 4px;
   font-size: 1.6rem;
   color: #0f172a;
+  text-align: center;
 }
 
 .panel-subtitle {
-  margin: 0 0 12px;
-  color: #475569;
+  margin: 0 0 24px;
+  color: #64748b;
   font-size: 0.95rem;
+  text-align: center;
 }
 
+/* 3. FORM STYLING */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+label {
+  color: #1e293b;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: -8px;
+}
+
+input[type='text'],
+input[type='number'],
+input[type='email'] {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+}
+
+input:focus {
+  outline: none;
+  border-color: #0f766e;
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.15);
+}
+
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 8px 0;
+}
+
+.checkbox-group label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+/* 4. BUTTONS */
 .close-btn {
   position: absolute;
-  top: 14px;
-  right: 14px;
-  background: rgba(255, 255, 255, 0.85);
-  border: 1px solid rgba(15, 23, 42, 0.12);
-  color: #0f172a;
-  font-size: 20px;
+  top: 20px;
+  right: 20px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  color: #64748b;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
   cursor: pointer;
-  line-height: 1;
-  padding: 8px 10px;
-  border-radius: 10px;
-  transition:
-    background-color 0.2s,
-    transform 0.2s;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
 }
 
-.close-btn:hover {
-  background-color: rgba(241, 245, 249, 0.95);
+/* THE SUBMIT BUTTON */
+button[type='submit'] {
+  margin-top: 10px;
+  background: linear-gradient(135deg, #0f766e, #0d9488);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+button[type='submit']:hover:not(:disabled) {
+  opacity: 0.9;
   transform: translateY(-1px);
 }
 
+button[type='submit']:disabled {
+  background: #cbd5e1;
+  cursor: not-allowed;
+}
+
+/* 5. ERROR MESSAGES */
+.error {
+  color: #e11d48;
+  font-size: 0.8rem;
+  margin-top: -10px;
+  font-weight: 500;
+}
+
 @keyframes fade-overlay {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
