@@ -1,93 +1,158 @@
-import { Component, signal, inject, viewChild, computed, HostListener } from '@angular/core';
+import { Component, signal, inject, viewChild, computed, HostListener, OnInit, effect } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormsDemo } from '../forms-demo/forms-demo';
-import { LocationService } from '../../services/location-service';
+import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+import {CdkTrapFocus } from '@angular/cdk/a11y';
+import { BASE_URL, LocationService } from '../../services/location-service';
 import { HousingLocationInfo } from '../../models/housing-location-info';
-import { hidden } from '@angular/forms/signals';
-import { CdkTrapFocus } from '@angular/cdk/a11y';
+
 @Component({
   selector: 'app-location-form',
   standalone: true,
-  imports: [FormsDemo, CdkTrapFocus],
+  // We include ReactiveFormsModule here because the form is now in this component's template
+  imports: [ReactiveFormsModule, CdkTrapFocus],
   templateUrl: './location-form.html',
   styleUrl: './location-form.css',
   host: {
     '(document:keydown.escape)': 'handleEscape()',
   },
 })
-export class LocationForm {
-  shouldShowPanel = signal<boolean>(false);
-  router = inject(Router);
-  route = inject(ActivatedRoute);
-  locationService = inject(LocationService);
+export class LocationForm implements OnInit {
+  // Services
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+  private readonly locationService = inject(LocationService);
+  private readonly fb = inject(FormBuilder);
+  private readonly baseUrl = inject(BASE_URL);
 
-  formComponent = viewChild(FormsDemo);
+  // State Signals
+  readonly shouldShowPanel = signal<boolean>(false);
+  readonly editLocationId = signal<number | null>(null);
+  readonly defaultPhoto = `${this.baseUrl}/bernard-hermant-CLKGGwIBTaY-unsplash.jpg`;
 
-  editLocationId = signal<number | null>(null);
-
-  locationToEdit = computed<HousingLocationInfo | null>(() => {
-    const id = this.editLocationId();
-    if (id === null) {
-      return null;
-    }
-
-    return this.locationService.getLocationForId(id) ?? null;
+  // 1. Form Definition
+  readonly locationForm = this.fb.group({
+    name: ['', [Validators.required, Validators.minLength(3)]],
+    city: ['', [Validators.required]],
+    state: ['', [Validators.required]],
+    photo: [''],
+    availableUnits: [1, [Validators.required, Validators.min(0)]],
+    wifi: [false],
+    laundry: [false],
   });
 
-  panelTitle = computed(() => (this.editLocationId() === null ? 'Add Location' : 'Edit Location'));
-  private originalOverflow: string = '';
+  // 2. Computed values for Logic and UI
+  readonly locationToEdit = computed<HousingLocationInfo | null>(() => {
+    const id = this.editLocationId();
+    return id !== null ? this.locationService.getLocationForId(id) ?? null : null;
+  });
 
-  private setBodyOverflow(hidden: boolean): void {
-    if (hidden) {
-      // ONLY save if we haven't already saved a value (avoid overwriting 'hidden')
-      if (this.originalOverflow === '') {
-        this.originalOverflow = window.getComputedStyle(document.body).overflow;
+  readonly panelTitle = computed(() => 
+    this.editLocationId() === null ? 'Add Location' : 'Edit Location'
+  );
+
+  readonly submitLabel = computed(() => 
+    this.editLocationId() === null ? 'Add location' : 'Save changes'
+  );
+
+  constructor() {
+    // 3. Effect: Sync form whenever locationToEdit changes
+    effect(() => {
+      const location = this.locationToEdit();
+
+      if (!location) {
+        this.locationForm.reset({
+          name: '', city: '', state: '', photo: '',
+          availableUnits: 1, wifi: false, laundry: false,
+        });
+      } else {
+        this.locationForm.reset({
+          name: location.name,
+          city: location.city,
+          state: location.state,
+          photo: location.photo,
+          availableUnits: location.availableUnits,
+          wifi: location.wifi,
+          laundry: location.laundry,
+        });
       }
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = this.originalOverflow;
-      this.originalOverflow = '';
-    }
+      this.locationForm.markAsPristine();
+      this.locationForm.markAsUntouched();
+    });
   }
 
   ngOnInit() {
-    const routeId =
-      this.route.snapshot.paramMap.get('id') ?? this.route.parent?.snapshot.paramMap.get('id');
-    this.editLocationId.set(routeId === null ? null : Number(routeId));
+    const routeId = this.route.snapshot.paramMap.get('id') ?? 
+                    this.route.parent?.snapshot.paramMap.get('id');
+    
+    this.editLocationId.set(routeId ? Number(routeId) : null);
     this.showPanel();
   }
+
   showPanel() {
     this.shouldShowPanel.set(true);
     this.setBodyOverflow(true);
   }
 
+  @HostListener('document:keydown.escape')
   handleEscape() {
     if (this.shouldShowPanel()) {
       this.hidePanel();
     }
   }
 
+  // 4. Dirty/Invalid check for the Escape/Close logic
+  shouldConfirmClose(): boolean {
+    return this.locationForm.dirty || (this.locationForm.touched && this.locationForm.invalid);
+  }
+
   hidePanel(forceClose = false) {
     if (!forceClose && !this.canCloseForm()) {
       return;
     }
+
     this.shouldShowPanel.set(false);
     this.setBodyOverflow(false);
 
     const editId = this.editLocationId();
     if (editId === null) {
       this.router.navigate(['home']);
-      return;
+    } else {
+      this.router.navigate(['details', editId]);
     }
-    return this.router.navigate(['details', editId]);
   }
 
   private canCloseForm(): boolean {
-    const childForm = this.formComponent();
-    if (!childForm || !childForm.shouldConfirmClose()) {
+    if (!this.shouldConfirmClose()) {
       return true;
     }
-
     return confirm('Your form has some incomplete changes. Do you want to still exit?');
+  }
+
+  onSubmit() {
+    if (this.locationForm.invalid) {
+      this.locationForm.markAllAsTouched();
+      return;
+    }
+
+    const val = this.locationForm.getRawValue();
+    const locationData: Omit<HousingLocationInfo, 'id'> = {
+      name: val.name ?? '',
+      city: val.city ?? '',
+      state: val.state ?? '',
+      photo: val.photo?.trim() ? val.photo : this.defaultPhoto,
+      availableUnits: Number(val.availableUnits ?? 0),
+      wifi: !!val.wifi,
+      laundry: !!val.laundry,
+    };
+
+    const id = this.editLocationId();
+    if (id === null) {
+      this.locationService.addLocation(locationData);
+    } else {
+      this.locationService.updateLocation(id, locationData);
+    }
+
+    // Success! Close panel and navigate away
+    this.hidePanel(true);
   }
 }
