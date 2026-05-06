@@ -1,75 +1,75 @@
-import { Component, signal, inject, viewChild, computed, HostListener } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { FormsDemo } from '../forms-demo/forms-demo';
-import { LocationService } from '../../services/location-service';
-import { HousingLocationInfo } from '../../models/housing-location-info';
-import { hidden } from '@angular/forms/signals';
-import { CdkTrapFocus } from '@angular/cdk/a11y';
-@Component({
-  selector: 'app-location-form',
-  standalone: true,
-  imports: [FormsDemo, CdkTrapFocus],
-  templateUrl: './location-form.html',
-  styleUrl: './location-form.css',
-})
-export class LocationForm {
-  shouldShowPanel = signal<boolean>(false);
-  router = inject(Router);
-  route = inject(ActivatedRoute);
-  locationService = inject(LocationService);
+// import { Component, signal, inject, viewChild, computed, HostListener } from '@angular/core';
+// import { ActivatedRoute, Router } from '@angular/router';
+// import { FormsDemo } from '../forms-demo/forms-demo';
+// import { LocationService } from '../../services/location-service';
+// import { HousingLocationInfo } from '../../models/housing-location-info';
+// import { hidden } from '@angular/forms/signals';
+// import { CdkTrapFocus } from '@angular/cdk/a11y';
+// @Component({
+//   selector: 'app-location-form',
+//   standalone: true,
+//   imports: [FormsDemo, CdkTrapFocus],
+//   templateUrl: './location-form.html',
+//   styleUrl: './location-form.css',
+// })
+// export class LocationForm {
+//   shouldShowPanel = signal<boolean>(false);
+//   router = inject(Router);
+//   route = inject(ActivatedRoute);
+//   locationService = inject(LocationService);
 
-  formComponent = viewChild(FormsDemo);
+//   formComponent = viewChild(FormsDemo);
 
-  editLocationId = signal<number | null>(null);
+//   editLocationId = signal<number | null>(null);
 
-  locationToEdit = computed<HousingLocationInfo | null>(() => {
-    const id = this.editLocationId();
-    if (id === null) {
-      return null;
-    }
+//   locationToEdit = computed<HousingLocationInfo | null>(() => {
+//     const id = this.editLocationId();
+//     if (id === null) {
+//       return null;
+//     }
 
-    return this.locationService.getLocationForId(id) ?? null;
-  });
+//     return this.locationService.getLocationForId(id) ?? null;
+//   });
 
-  panelTitle = computed(() => (this.editLocationId() === null ? 'Add Location' : 'Edit Location'));
+//   panelTitle = computed(() => (this.editLocationId() === null ? 'Add Location' : 'Edit Location'));
 
-  ngOnInit() {
-    const routeId =
-      this.route.snapshot.paramMap.get('id') ?? this.route.parent?.snapshot.paramMap.get('id');
-    this.editLocationId.set(routeId === null ? null : Number(routeId));
-    this.showPanel();
-  }
-  showPanel() {
-    this.shouldShowPanel.set(true);
-    document.body.style.overflow = 'hidden';
-  }
-  @HostListener('document:keydown.escape')
-  handleEscape() {
-    if (this.shouldShowPanel()) {
-      this.hidePanel();
-    }
-  }
-  hidePanel(forceClose = false) {
-    if (!forceClose && !this.canCloseForm()) {
-      return;
-    }
-    this.shouldShowPanel.set(false);
-    document.body.style.overflow = 'auto';
+//   ngOnInit() {
+//     const routeId =
+//       this.route.snapshot.paramMap.get('id') ?? this.route.parent?.snapshot.paramMap.get('id');
+//     this.editLocationId.set(routeId === null ? null : Number(routeId));
+//     this.showPanel();
+//   }
+//   showPanel() {
+//     this.shouldShowPanel.set(true);
+//     document.body.style.overflow = 'hidden';
+//   }
+//   @HostListener('document:keydown.escape')
+//   handleEscape() {
+//     if (this.shouldShowPanel()) {
+//       this.hidePanel();
+//     }
+//   }
+//   hidePanel(forceClose = false) {
+//     if (!forceClose && !this.canCloseForm()) {
+//       return;
+//     }
+//     this.shouldShowPanel.set(false);
+//     document.body.style.overflow = 'auto';
 
-    const editId = this.editLocationId();
-    if (editId === null) {
-      this.router.navigate(['home']);
-      return;
-    }
-    return this.router.navigate(['details', editId]);
-  }
+//     const editId = this.editLocationId();
+//     if (editId === null) {
+//       this.router.navigate(['home']);
+//       return;
+//     }
+//     return this.router.navigate(['details', editId]);
+//   }
 
-  private canCloseForm(): boolean {
-    const childForm = this.formComponent();
-    if (!childForm || !childForm.shouldConfirmClose()) {
-      return true;
-    }
+//   private canCloseForm(): boolean {
+//     const childForm = this.formComponent();
+//     if (!childForm || !childForm.shouldConfirmClose()) {
+//       return true;
+//     }
 
-    return confirm('Your form has some incomplete changes. Do you want to still exit?');
-  }
-}
+//     return confirm('Your form has some incomplete changes. Do you want to still exit?');
+//   }
+// }
