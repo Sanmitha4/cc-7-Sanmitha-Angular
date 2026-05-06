@@ -1,110 +1,102 @@
 import { Component, inject, signal, computed, linkedSignal } from '@angular/core';
-import { HousingLocation } from '../housing-location/housing-location';
-import { HousingLocationInfo } from '../../models/housing-location-info';
-import { LocationService, BASE_URL } from '../../services/location-service';
 import { Router, RouterOutlet, ActivatedRoute } from '@angular/router';
-import { HousingLocationInfoViewModel } from '../../models/housing-location-info';
-import { FormsDemo } from '@components/forms-demo/forms-demo';
+import { Subject, switchMap, startWith } from 'rxjs';
+import { toSignal } from '@angular/core/rxjs-interop';
+
+import { HousingLocation } from '../housing-location/housing-location';
+import { SearchBarComponent } from '../search-bar/search-bar';
+import { LocationService, BASE_URL } from '../../services/location-service';
+import { HousingLocationInfo, HousingLocationInfoViewModel } from '../../models/housing-location-info';
 
 @Component({
   selector: 'app-home',
-  imports: [HousingLocation, RouterOutlet],
+  standalone: true,
+  imports: [SearchBarComponent, HousingLocation, RouterOutlet],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
 export class Home {
-  locationService: LocationService = inject(LocationService);
+  private readonly locationService = inject(LocationService);
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  readonly baseUrl = inject(BASE_URL);
 
-  activatedRoute = inject(ActivatedRoute);
+  // --- 1. SEARCH LOGIC ---
+  private readonly searchTerms$ = new Subject<string>();
 
-  router = inject(Router);
-  baseUrl: string = inject(BASE_URL);
-
-  mode = signal<'normal' | 'edit'>('normal');
-  modeString = computed(() =>
-    this.mode() === 'edit' ? 'Select items' : 'Click on a card to see details',
+  // This signal updates whenever the API returns new search results
+  private readonly rawLocations = toSignal(
+    this.searchTerms$.pipe(
+      startWith(''), 
+      switchMap(term => this.locationService.searchLocationsByCity(term))
+    ),
+    { initialValue: [] }
   );
 
+  onSearch(term: string) {
+    this.searchTerms$.next(term);
+  }
+
+  // --- 2. SELECTION & DISPLAY LOGIC ---
+  mode = signal<'normal' | 'edit'>('normal');
   selectedIds = signal<Set<number>>(new Set());
   selectionCount = computed(() => this.selectedIds().size);
 
+  // We use the rawLocations() signal as the SOURCE here
   locationsToDisplay = linkedSignal<HousingLocationInfo[], HousingLocationInfoViewModel[]>({
-    source: this.locationService.getAllLocation(),
+    source: () => this.rawLocations(), // Whenever search results change, this re-runs
 
-    computation: (newDependencyHouseLocationsInfoArray, prevValue) => {
-      const prevLocationViewModels = (prevValue?.value as HousingLocationInfoViewModel[]) ?? [];
-      const viewLocation = newDependencyHouseLocationsInfoArray.map((hl) => {
-        const matchedModel = prevLocationViewModels.find(
-          (prevLocation) => prevLocation.id === hl.id,
-        );
+    computation: (newLocations, prevValue) => {
+      const prevViewModels = (prevValue?.value as HousingLocationInfoViewModel[]) ?? [];
+      
+      return newLocations.map((hl) => {
+        const matched = prevViewModels.find(p => p.id === hl.id);
         return {
           ...hl,
-          selected: matchedModel?.selected ?? false,
+          selected: matched?.selected ?? false,
         };
       });
-      return viewLocation;
     },
   });
 
+  // --- 3. EVENT HANDLERS (Keep your existing ones) ---
   handleLocationClick(housingLocationInfo: HousingLocationInfo) {
-    console.log(`Home:${housingLocationInfo}is clicked`);
-
     if (this.mode() === 'normal') {
       this.router.navigate(['details', housingLocationInfo.id]);
-      const viewModels = this.locationsToDisplay().map((vm) => {
-        const newVm = { ...vm };
-        newVm.selected = false;
-        return newVm;
-      });
-      this.locationsToDisplay.set(viewModels);
+      // Reset selections on navigate
+      this.locationsToDisplay.set(this.locationsToDisplay().map(vm => ({...vm, selected: false})));
       this.selectedIds.set(new Set());
     } else {
       const nextSelectedIds = new Set(this.selectedIds());
-
-      if (nextSelectedIds.has(housingLocationInfo.id)) {
-        nextSelectedIds.delete(housingLocationInfo.id);
-      } else {
-        nextSelectedIds.add(housingLocationInfo.id);
-      }
+      nextSelectedIds.has(housingLocationInfo.id) 
+        ? nextSelectedIds.delete(housingLocationInfo.id) 
+        : nextSelectedIds.add(housingLocationInfo.id);
 
       this.selectedIds.set(nextSelectedIds);
 
-      const viewModel = this.locationsToDisplay().map((vm) =>
-        vm.id === housingLocationInfo.id ? { ...vm, selected: nextSelectedIds.has(vm.id) } : vm,
+      // Update the view model signal
+      this.locationsToDisplay.set(
+        this.locationsToDisplay().map(vm => 
+          vm.id === housingLocationInfo.id ? { ...vm, selected: nextSelectedIds.has(vm.id) } : vm
+        )
       );
-
-      this.locationsToDisplay.set(viewModel);
     }
-  }
-
-  isSelected(id: number): boolean {
-    return this.selectedIds().has(id);
   }
 
   handleCheckbox(event: Event) {
     const checked = (event.target as HTMLInputElement).checked;
     this.mode.set(checked ? 'edit' : 'normal');
-    if (!checked) {
-      this.selectedIds.set(new Set());
-    }
+    if (!checked) this.selectedIds.set(new Set());
   }
 
   deleteSelected() {
-    const count = this.selectionCount();
-    if (confirm(`Are you sure you want to delete ${count} items?`)) {
+    if (confirm(`Are you sure you want to delete ${this.selectionCount()} items?`)) {
       this.locationService.deleteLocations(this.selectedIds());
       this.selectedIds.set(new Set());
     }
   }
 
-  restoreSelected() {
-    this.locationService.restoreLastAction();
-  }
-  canRestore(): boolean {
-    return this.locationService.canRestore();
-  }
-
-  handleAddLocation() {
-    this.router.navigate(['edit'], { relativeTo: this.activatedRoute });
-  }
+  restoreSelected() { this.locationService.restoreLastAction(); }
+  canRestore(): boolean { return this.locationService.canRestore(); }
+  handleAddLocation() { this.router.navigate(['edit'], { relativeTo: this.activatedRoute }); }
 }

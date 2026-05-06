@@ -1,7 +1,9 @@
-<div class="search-box">
+
+<div class="search-group">
   <input 
     type="text" 
     [formControl]="searchControl" 
-    placeholder="Filter by city (min 3 characters)..."
+    placeholder="Filter by city" 
   />
+  <button class="primary" type="button" (click)="emitSearch()">Search</button>
 </div>

@@ -1,5 +1,7 @@
 import { inject, Injectable, InjectionToken, signal } from '@angular/core';
 import { HousingLocationInfo } from '../models/housing-location-info';
+import { Observable, of } from 'rxjs'; // <--- Add this
+import { map } from 'rxjs/operators'
 
 export const BASE_URL = new InjectionToken<string>('base url', {
   providedIn: 'root',
@@ -184,5 +186,20 @@ export class LocationService {
   }
   canRestore(): boolean {
     return this.historyStack.length > 0;
+  }
+  searchLocationsByCity(term: string): Observable<HousingLocationInfo[]> {
+    // We use 'of' to turn the current signal value into an Observable stream
+    return of(this.locations()).pipe(
+      map(list => {
+        if (!term.trim()) {
+          return list; // Return everything if search is empty
+        }
+        const lowerTerm = term.toLowerCase();
+        return list.filter(location => 
+          location.city.toLowerCase().includes(lowerTerm) ||
+          location.name.toLowerCase().includes(lowerTerm)
+        );
+      })
+    );
   }
 }

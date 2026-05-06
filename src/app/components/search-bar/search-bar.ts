@@ -29,4 +29,7 @@ export class SearchBarComponent implements OnInit {
       this.searchChanged.emit(value ?? '');
     });
   }
+  emitSearch() {
+    this.searchChanged.emit(this.searchControl.value ?? '');
+  }
 }
