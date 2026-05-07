@@ -11,21 +11,28 @@ import {
   HousingLocationInfo,
   HousingLocationInfoViewModel,
 } from '../../models/housing-location-info';
+import { TableModule } from 'primeng/table';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [SearchBarComponent, HousingLocation, CardLayoutComponent, RouterOutlet],
+  imports: [SearchBarComponent, HousingLocation, CardLayoutComponent, RouterOutlet,TableModule],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
 export class Home {
   private readonly locationService = inject(LocationService);
   private readonly activatedRoute = inject(ActivatedRoute);
+
   private readonly router = inject(Router);
   readonly baseUrl = inject(BASE_URL);
 
   private readonly searchTerms$ = new Subject<string>();
+  isDesktop = signal(window.innerWidth > 1024);
+
+  
+  
 
   /*combine the search term with a 'Live' observable of the service data.
    */
@@ -44,10 +51,17 @@ export class Home {
   onSearch(term: string) {
     this.searchTerms$.next(term);
   }
+  constructor() {
+    // --- ADD THIS EVENT LISTENER ---
+    window.addEventListener('resize', () => {
+      this.isDesktop.set(window.innerWidth > 1024);
+    });
+  }
 
   mode = signal<'normal' | 'edit'>('normal');
   selectedIds = signal<Set<number>>(new Set());
   selectionCount = computed(() => this.selectedIds().size);
+  
 
   // linkedSignal ensures that even if the search results change,
   // we can still manually toggle 'selected' status in Edit mode.

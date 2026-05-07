@@ -46,6 +46,43 @@
       <p>No locations found.</p>
     }
   </section> -->
+
+  <section class="results">
+  @if (isDesktop()) {
+    <p-table [value]="locationsToDisplay()" [tableStyle]="{ 'min-width': '50rem' }">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Name</th>
+          <th>City</th>
+          <th>Units</th>
+          <th>Action</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-location>
+        <tr>
+          <td>{{ location.name }}</td>
+          <td>{{ location.city }}</td>
+          <td>{{ location.availableUnits }}</td>
+          <td>
+            <button class="primary" (click)="handleLocationClick(location)">Details</button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  } @else {
+    @for (housingLocation of locationsToDisplay(); track housingLocation.id) {
+       <app-card-layout>
+         <app-housing-location
+           [housingLocation]="housingLocation"
+           [mode]="mode()"
+           [isSelected]="housingLocation.selected ?? false"
+           (onLocationClick)="handleLocationClick($event)"
+         />
+       </app-card-layout>
+    }
+  }
+</section>
+<!--   
   <section class="results">
     @for (housingLocation of locationsToDisplay(); track housingLocation.id) {
       <app-card-layout>
@@ -60,4 +97,4 @@
       <p>No locations found.</p>
     }
   </section>
-</section>
+</section> -->
