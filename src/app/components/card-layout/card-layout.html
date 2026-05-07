@@ -1,10 +1,3 @@
 <div class="card-embellishment">
-  @if (isDesktop() && tableTemplate()) {
-    <ng-container 
-      [ngTemplateOutlet]="tableTemplate()!" 
-      [ngTemplateOutletContext]="{ $implicit: items() }">
-    </ng-container>
-  } @else {
-    <ng-content />
-  }
+  <ng-content />
 </div>

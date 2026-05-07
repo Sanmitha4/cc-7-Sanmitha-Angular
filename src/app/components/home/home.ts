@@ -1,4 +1,4 @@
-import { Component, inject, signal, computed, linkedSignal } from '@angular/core';
+import { Component, inject, signal, computed, linkedSignal, DestroyRef } from '@angular/core';
 import { Router, RouterOutlet, ActivatedRoute } from '@angular/router';
 import { Subject, switchMap, startWith, combineLatest, debounceTime } from 'rxjs';
 import { toSignal, toObservable } from '@angular/core/rxjs-interop';
@@ -11,8 +11,9 @@ import {
   HousingLocationInfo,
   HousingLocationInfoViewModel,
 } from '../../models/housing-location-info';
+
 import { TableModule } from 'primeng/table';
-import { BreakpointObserver } from '@angular/cdk/layout';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-home',
@@ -29,7 +30,25 @@ export class Home {
   readonly baseUrl = inject(BASE_URL);
 
   private readonly searchTerms$ = new Subject<string>();
+  
+  private readonly breakpointObserver = inject(BreakpointObserver);
+  private readonly destroyRef = inject(DestroyRef);
+
   isDesktop = signal(window.innerWidth > 1024);
+
+  ngOnInit() {
+    // 2. Use BreakpointObserver for professional responsive tracking
+    const layoutSub = this.breakpointObserver
+      .observe([Breakpoints.Large, Breakpoints.XLarge])
+      .subscribe((result) => {
+        this.isDesktop.set(result.matches);
+      });
+
+    // 3. Use DestroyRef for clean up (replaces manual window.removeEventListener)
+    this.destroyRef.onDestroy(() => {
+      layoutSub.unsubscribe();
+    });
+  }
 
   
   

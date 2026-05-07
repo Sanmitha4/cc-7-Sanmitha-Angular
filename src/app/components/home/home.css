@@ -79,3 +79,60 @@ form {
   align-items: center; 
   gap: 10px;          
 }
+
+/* Container to give the table some breathing room */
+.table-container {
+  margin-top: 50px;
+  padding: 15px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* Specifically for the location photos in the table rows */
+.table-img {
+  width: 65px;
+  height: 45px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+/* Styling the Table Header to match your --primary-color */
+:host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
+  background-color: #f8f9fa;
+  color: var(--primary-color);
+  font-weight: 600;
+  padding: 1rem;
+  border-bottom: 2px solid var(--primary-color);
+}
+
+/* Subtle hover effect for table rows */
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr:hover {
+  background-color: #f1f4ff !important;
+}
+
+/* Ensure icons for WiFi/Laundry are sized appropriately */
+.pi {
+  font-size: 1.1rem;
+  vertical-align: middle;
+}
+/* Ensure the card layout doesn't conflict with the table view */
+.card-grid {
+  display: grid;
+  column-gap: 14px;
+  row-gap: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 400px));
+  margin-top: 50px;
+  justify-content: space-around;
+}
+
+.controls {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.action-toggle-group {
+  /* Maintain your existing styles but ensure it doesn't overlap on small screens */
+  flex-wrap: wrap;
+}
