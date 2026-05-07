@@ -38,7 +38,7 @@
       <div class="table-container">
         <p-table
           [value]="locationsToDisplay()"
-          [tableStyle]="{ 'width': '100%' }"
+          [tableStyle]="{ width: '100%' }"
           styleClass="p-datatable-striped p-datatable-gridlines"
         >
           <ng-template pTemplate="header">
@@ -65,11 +65,8 @@
                 <span [style.color]="location.wifi ? 'var(--primary-color)' : '#ccc'" title="WiFi">
                   <i class="pi pi-wifi" style="margin-right: 10px"></i>
                 </span>
-                <span
-                  [style.color]="location.laundry ? 'var(--primary-color)' : '#ccc'"
-                  title="Laundry"
-                >
-                  <i class="pi pi-bolt"></i>
+                <span [style.color]="location.laundry ? 'var(--primary-color)' : '#ccc'">
+                  <span style="font-size: 1.2rem">🗑️</span>
                 </span>
               </td>
               <td>{{ location.availableUnits }}</td>
