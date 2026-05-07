@@ -79,88 +79,73 @@ form {
   align-items: center; 
   gap: 10px;          
 }
-
-/* 1. MAKE TABLE OCCUPY FULL SPACE */
 .table-container {
-  margin-top: 50px;
-  padding: 20px;
+  grid-column: 1 / -1; 
+  width: 100%;
+  margin-top: 30px;
+  padding: 0; /* Removing container padding so the table fills the card perfectly */
   background: #ffffff;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  width: 100%; /* Ensure container takes full width */
-  box-sizing: border-box;
+  overflow: hidden; /* Keeps the table corners within the border-radius */
 }
 
-/* Force the PrimeNG table to span 100% of the container */
+/* 2. FORCE TABLE EXPANSION */
 :host ::ng-deep .p-datatable {
-  width: 100%;
+  width: 100% !important;
+  table-layout: auto;
 }
 
-/* 2. FIX SPACING (HOME NAME ATTACHED TO LINES) */
+/* 3. FIX SPACING (STOP TEXT TOUCHING LINES) */
 :host ::ng-deep .p-datatable .p-datatable-tbody > tr > td {
-  padding: 1.25rem 1.5rem; /* Vertical spacing | Horizontal spacing */
-  border-bottom: 1px solid #e9ecef;
+  padding: 1rem 1.5rem !important; /* Vertical | Horizontal breathing room */
+  border-bottom: 1px solid #f0f0f0;
   vertical-align: middle;
+  white-space: nowrap; /* Forces text to stay on one line, pushing the table wider */
 }
 
-/* Specifically increase spacing for the 'Name' column if needed */
-:host ::ng-deep .p-datatable .p-datatable-tbody > tr > td:last-child {
-  padding-left: 2rem; 
-}
-
-/* 3. HEADER STYLING */
+/* 4. HEADER ALIGNMENT */
 :host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
   background-color: #f8f9fa;
   color: var(--primary-color);
   font-weight: 600;
-  padding: 1.25rem 1.5rem; /* Match the body padding for alignment */
+  padding: 1rem 1.5rem !important;
   border-bottom: 2px solid var(--primary-color);
   text-align: left;
 }
 
-/* 4. IMAGE STYLING */
+/* 5. COLUMN WIDTH TUNING */
+/* Keep the picture column small so the name column gets the 'remaining' space */
+:host ::ng-deep .p-datatable .p-datatable-thead > tr > th:first-child {
+  width: 120px;
+}
+
+/* 6. IMAGE STYLING */
 .table-img {
-  width: 80px;  /* Slightly larger for better desktop visibility */
-  height: 55px;
+  width: 70px;
+  height: 50px;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 6px;
   display: block;
 }
 
-/* 5. ROW HOVER & TRANSITION */
-:host ::ng-deep .p-datatable .p-datatable-tbody > tr {
-  transition: background-color 0.2s;
-}
-
+/* 7. ROW HOVER EFFECT */
 :host ::ng-deep .p-datatable .p-datatable-tbody > tr:hover {
-  background-color: #f1f4ff !important;
+  background-color: #f8faff !important;
 }
 
-/* 6. CONTROLS & LAYOUT */
-.controls {
-  margin-top: 20px;
+/* 8. MAINTAIN SEARCH & BUTTON LAYOUT */
+form {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* Spreads out toggle and search */
-  gap: 20px;
+  gap: 12px;
   width: 100%;
 }
 
-.action-toggle-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-/* Grid Layout fallback/adjustment */
-.card-grid {
-  display: grid;
-  gap: 20px;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); /* More responsive than fixed 400px */
-  margin-top: 30px;
-}
-/* Add this to your existing styles */
-:host ::ng-deep .p-datatable {
-  width: 100% !important; 
-  table-layout: auto; /* Allows columns to distribute based on content/space */
+input[type='text'] {
+  border: solid 1px var(--primary-color);
+  padding: 10px 15px;
+  border-radius: 8px;
+  flex-grow: 1; /* Allows search bar to take available space */
+  max-width: 400px;
 }
