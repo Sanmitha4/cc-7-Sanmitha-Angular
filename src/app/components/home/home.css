@@ -96,7 +96,7 @@ form {
   table-layout: auto;
 }
 
-/* 3. FIX SPACING (STOP TEXT TOUCHING LINES) */
+/* SPACING  */
 :host ::ng-deep .p-datatable .p-datatable-tbody > tr > td {
   padding: 1rem 1.5rem !important; /* Vertical | Horizontal breathing room */
   border-bottom: 1px solid #f0f0f0;
@@ -104,7 +104,7 @@ form {
   white-space: nowrap; /* Forces text to stay on one line, pushing the table wider */
 }
 
-/* 4. HEADER ALIGNMENT */
+/*  HEADER ALIGNMENT */
 :host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
   background-color: #f8f9fa;
   color: var(--primary-color);
@@ -114,7 +114,7 @@ form {
   text-align: left;
 }
 
-/* 5. COLUMN WIDTH TUNING */
+/* COLUMN WIDTH TUNING */
 /* Keep the picture column small so the name column gets the 'remaining' space */
 :host ::ng-deep .p-datatable .p-datatable-thead > tr > th:first-child {
   width: 120px;
@@ -134,7 +134,7 @@ form {
   background-color: #f8faff !important;
 }
 
-/* 8. MAINTAIN SEARCH & BUTTON LAYOUT */
+/*  MAINTAIN SEARCH & BUTTON LAYOUT */
 form {
   display: flex;
   align-items: center;

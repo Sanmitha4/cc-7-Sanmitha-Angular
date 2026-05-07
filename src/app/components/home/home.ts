@@ -37,7 +37,7 @@ export class Home {
   isDesktop = signal(window.innerWidth > 1024);
 
   ngOnInit() {
-    // 2. Use BreakpointObserver for professional responsive tracking
+    // Use BreakpointObserver for responsive tracking
     const layoutSub = this.breakpointObserver
       .observe([Breakpoints.Large, Breakpoints.XLarge])
       .subscribe((result) => {
