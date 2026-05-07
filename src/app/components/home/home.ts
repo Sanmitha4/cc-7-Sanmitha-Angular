@@ -44,7 +44,7 @@ export class Home {
         this.isDesktop.set(result.matches);
       });
 
-    // 3. Use DestroyRef for clean up (replaces manual window.removeEventListener)
+    // Use DestroyRef for clean up (replaces manual window.removeEventListener)
     this.destroyRef.onDestroy(() => {
       layoutSub.unsubscribe();
     });
