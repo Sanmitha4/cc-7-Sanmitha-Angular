@@ -1,5 +1,7 @@
 import { inject, Injectable, InjectionToken, signal } from '@angular/core';
 import { HousingLocationInfo } from '../models/housing-location-info';
+import { Observable, of } from 'rxjs'; // <--- Add this
+import { map } from 'rxjs/operators'
 
 export const BASE_URL = new InjectionToken<string>('base url', {
   providedIn: 'root',
@@ -129,21 +131,37 @@ export class LocationService {
   }
 
   getLocationForId(id: number): HousingLocationInfo | undefined {
-    return this.housingLocationList.find((location) => location.id === id);
+    return this.locations().find((location) => location.id === id);
   }
 
-  addLocation(location: HousingLocationInfo) {
-
-    const currentLocations=this.locations();
-    const newLocation={
+  addLocation(location: Omit<HousingLocationInfo, 'id'>) {
+    const currentLocations = this.locations();
+    const maxId = currentLocations.reduce((currentMax, loc) => Math.max(currentMax, loc.id), -1);
+    const newLocation = {
       ...location,
-      id:currentLocations.length
-    }
-    this.locations.update(list=>[...list,newLocation])
+      id: maxId + 1,
+    };
+    this.locations.update((list) => [...list, newLocation]);
+  }
 
-    // location.id=currentLocations.length;
-    // currentLocations.push(location);
-    // this.locations.set(currentLocations)
+  updateLocation(id: number, updatedLocation: Omit<HousingLocationInfo, 'id'>): boolean {
+    let hasUpdated = false;
+
+    this.locations.update((list) =>
+      list.map((location) => {
+        if (location.id !== id) {
+          return location;
+        }
+
+        hasUpdated = true;
+        return {
+          id,
+          ...updatedLocation,
+        };
+      }),
+    );
+
+    return hasUpdated;
   }
 
   private historyStack: HousingLocationInfo[][] = [];
@@ -155,18 +173,33 @@ export class LocationService {
     return list.filter((loc) => !deleteIds.has(loc.id));
   }
   deleteLocations(deleteIds: Set<number>) {
-    this.historyStack.push([...this.housingLocationList]);
+    this.historyStack.push([...this.locations()]);
 
-    this.housingLocationList = this.deletedLocationList(this.housingLocationList, deleteIds);
+    this.locations.update((list) => this.deletedLocationList(list, deleteIds));
   }
   restoreLastAction() {
     if (this.historyStack.length === 0) return;
     const previousState = this.historyStack.pop();
     if (previousState) {
-      this.housingLocationList = previousState;
+      this.locations.set(previousState);
     }
   }
   canRestore(): boolean {
     return this.historyStack.length > 0;
+  }
+  searchLocationsByCity(term: string): Observable<HousingLocationInfo[]> {
+    //  'of' to turn the current signal value into an Observable stream
+    return of(this.locations()).pipe(
+      map(list => {
+        if (!term.trim()) {
+          return list; // Return everything if search is empty
+        }
+        const lowerTerm = term.toLowerCase();
+        return list.filter(location => 
+          location.city.toLowerCase().includes(lowerTerm) ||
+          location.name.toLowerCase().includes(lowerTerm)
+        );
+      })
+    );
   }
 }

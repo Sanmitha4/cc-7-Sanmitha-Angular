@@ -1,7 +1,6 @@
 import { Component, inject } from '@angular/core';
 import {
   FormControl,
-  FormGroup,
   ReactiveFormsModule,
   FormBuilder,
   Validators,
@@ -9,45 +8,50 @@ import {
 
 @Component({
   selector: 'app-forms-demo',
-  imports: [ReactiveFormsModule],
+  standalone: true, // Needed for modern Angular apps
+  imports: [ReactiveFormsModule], // Must include this to use [formGroup] in HTML
   templateUrl: './forms-demo.html',
   styleUrl: './forms-demo.css',
 })
 export class FormsDemo {
-  formBuilder = inject(FormBuilder);
+  private readonly formBuilder = inject(FormBuilder);
 
+  // Standalone control
   name = new FormControl('');
-  // profileForm = new FormGroup({
-  //   firstName: new FormControl(''),
-  //   lastName: new FormControl(''),
-  //   address: new FormGroup({
-  //     street: new FormControl(''),
-  //     city: new FormControl(''),
-  //     state: new FormControl(''),
-  //   }),
-  // });
 
+  // Form Group using FormBuilder
   profileForm = this.formBuilder.group({
     firstName: ['', [Validators.required, Validators.minLength(6)]],
-    lastName: [''],
-    email: ['', Validators.email],
+    lastName: ['', Validators.required], // Added required here
+    email: ['', [Validators.required, Validators.email]], // Added required and email validation
     address: this.formBuilder.group({
-      street: [''],
-      city: [''],
-      state: [''],
+      street: ['', Validators.required],
+      city: ['', Validators.required],
+      state: ['', Validators.required],
     }),
   });
 
+  // Class methods (declared OUTSIDE the form object)
   handleChange(event: Event) {
-    console.log(this.name.value);
-    //console.log((event.target as HTMLInputElement).value)
+    console.log('Standalone name value:', this.name.value);
   }
+
   updateName() {
-    //this.name.setValue('Bob');
-    this.profileForm.patchValue({ lastName: 'sanmitha' });
+    // patchValue is great for updating only specific parts of the form
+    this.profileForm.patchValue({
+      firstName: 'Sanmitha',
+      lastName: 'Surname'
+    });
   }
 
   onSubmit() {
-    console.log(this.profileForm.value);
+    if (this.profileForm.valid) {
+      console.log('Form Submitted!', this.profileForm.value);
+      // Logic to send data to a service would go here
+    } else {
+      // Mark all fields as touched to trigger validation messages in the UI
+      this.profileForm.markAllAsTouched();
+      console.warn('Form is invalid');
+    }
   }
 }

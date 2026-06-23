@@ -1,12 +1,12 @@
 import { Component, inject, signal, computed } from '@angular/core';
 import { Injectable, InjectionToken } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { LocationService } from '../../services/location-service';
 import { HousingLocationInfo } from '../../models/housing-location-info';
 
 @Component({
   selector: 'app-location-details',
-  imports: [],
+  imports: [RouterOutlet],
   templateUrl: './location-details.html',
   styleUrl: './location-details.css',
 })
@@ -15,21 +15,25 @@ export class LocationDetails {
   router = inject(Router);
   //id=input.required<number>();
   locationService: LocationService = inject(LocationService);
-  location: HousingLocationInfo | undefined;
+  locations = this.locationService.getAllLocation();
 
   housingLocationId = signal<number>(-1);
+
+  currentLocation = computed<HousingLocationInfo | undefined>(() =>
+    this.locationService.getLocationForId(this.housingLocationId()),
+  );
 
   isFirst = computed(() => this.housingLocationId() === 0);
 
   isLast = computed(() => {
-    const total = this.locationService.getAllLocation().length;
-    return this.housingLocationId() === total - 1;
+    const locations = this.locations();
+    const lastLocation = locations[locations.length - 1];
+    return this.housingLocationId() === (lastLocation?.id ?? -1);
   });
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
       this.housingLocationId.set(Number(params['id']));
-      this.location = this.locationService.getLocationForId(this.housingLocationId());
     });
   }
   ngAfterViewInit() {
@@ -46,6 +50,10 @@ export class LocationDetails {
     if (!this.isLast()) {
       this.router.navigate(['details', this.housingLocationId() + 1]);
     }
+  }
+
+  handleEdit() {
+    this.router.navigate(['edit'], { relativeTo: this.route });
   }
   //console.log(housingLocationInfo);
   static count = 0;

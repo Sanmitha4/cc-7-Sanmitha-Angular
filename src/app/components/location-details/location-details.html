@@ -1,26 +1,29 @@
 <article>
+  <router-outlet></router-outlet>
+
   <img
     class="listing-photo"
-    [src]="location?.photo"
-    alt="Exterior photo of {{ location?.name }}"
+    [src]="currentLocation()?.photo"
+    alt="Exterior photo of {{ currentLocation()?.name }}"
     crossorigin
   />
 
   <section class="listing-description">
-    <h2 class="listing-heading">{{ location?.name }}</h2>
-    <p class="listing-location">{{ location?.city }}, {{ location?.state }}</p>
+    <h2 class="listing-heading">{{ currentLocation()?.name }}</h2>
+    <p class="listing-location">{{ currentLocation()?.city }}, {{ currentLocation()?.state }}</p>
   </section>
   <section class="listing-features">
     <h2 class="section-heading">About this housing location</h2>
     <ul>
-      <li>Units available: {{ location?.availableUnits }}</li>
-      <li>Does this location have wifi: {{ location?.wifi }}</li>
-      <li>Does this location have laundry: {{ location?.laundry }}</li>
+      <li>Units available: {{ currentLocation()?.availableUnits }}</li>
+      <li>Does this location have wifi: {{ currentLocation()?.wifi }}</li>
+      <li>Does this location have laundry: {{ currentLocation()?.laundry }}</li>
     </ul>
   </section>
   <div class="nav-controls">
     <button class="nav-btn" (click)="handlePrev()" [disabled]="isFirst()">Previous</button>
 
     <button class="nav-btn" (click)="handleNext()" [disabled]="isLast()">Next</button>
+    <button class="nav-btn" type="button" (click)="handleEdit()">Edit</button>
   </div>
 </article>

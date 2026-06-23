@@ -1,8 +1,12 @@
+<router-outlet></router-outlet>
+
 <section>
   <form>
-    <input type="text" placeholder="Filter by city" />
-    <button class="primary" type="button">Search</button>
+    <app-search-bar (searchChanged)="onSearch($event)"></app-search-bar>
+
+    <button class="secondary" type="button" (click)="handleAddLocation()">Add Location</button>
   </form>
+
   <div class="controls">
     <div>
       <label>
@@ -28,28 +32,133 @@
         }
       </div>
     }
-    <button
-      class="secondary"
-      type="button"
-      (click)="handleAddLocation()"
-    >
-      Add Location
-    </button>
-</div>
-
+  </div>
   <section class="results">
-    @for (housingLocation of locationsToDisplay(); track housingLocation.id) {
-      <app-housing-location
-        [housingLocation]="housingLocation"
-        [mode]="mode()"
-        [isSelected]="housingLocation.selected ?? false "
-        (onLocationClick)="handleLocationClick(housingLocation)"
-        
-      />
-    } @empty {
-      <p>No locations found.</p>
+    @if (isDesktop()) {
+      <div class="table-container">
+        <p-table
+          [value]="locationsToDisplay()"
+          [tableStyle]="{ width: '100%' }"
+          styleClass="p-datatable-striped p-datatable-gridlines"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Picture</th>
+              <th>Name</th>
+              <th>City</th>
+              <th>State</th>
+              <th>Amenities</th>
+              <th>Units</th>
+              <th>Action</th>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-location>
+            <tr>
+              <td>
+                <img [src]="location.photo" [alt]="location.name" class="table-img" />
+              </td>
+              <td>{{ location.name }}</td>
+              <td>{{ location.city }}</td>
+              <td>{{ location.state }}</td>
+              <td>
+                <span [style.color]="location.wifi ? 'var(--primary-color)' : '#ccc'" title="WiFi">
+                  <i class="pi pi-wifi" style="margin-right: 10px"></i>
+                </span>
+                <span [style.color]="location.laundry ? 'var(--primary-color)' : '#ccc'">
+                  <span style="font-size: 1.2rem">🗑️</span>
+                </span>
+              </td>
+              <td>{{ location.availableUnits }}</td>
+              <td>
+                <button class="primary" type="button" (click)="handleLocationClick(location)">
+                  View
+                </button>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    } @else {
+      <div class="card-grid">
+        @for (housingLocation of locationsToDisplay(); track housingLocation.id) {
+          <app-card-layout>
+            <app-housing-location
+              [housingLocation]="housingLocation"
+              [mode]="mode()"
+              [isSelected]="housingLocation.selected ?? false"
+              (onLocationClick)="handleLocationClick($event)"
+            />
+          </app-card-layout>
+        } @empty {
+          <p>No locations found.</p>
+        }
+      </div>
     }
   </section>
 </section>
 
-
+<!-- <section class="results">
+    @for (housingLocation of locationsToDisplay(); track housingLocation.id) {
+      <app-housing-location
+        [housingLocation]="housingLocation"
+        [mode]="mode()"
+        [isSelected]="housingLocation.selected ?? false"
+        (onLocationClick)="handleLocationClick($event)"
+      />
+    } @empty {
+      <p>No locations found.</p>
+    }
+  </section> -->
+<!-- 
+  <section class="results">
+  @if (isDesktop()) {
+    <p-table [value]="locationsToDisplay()" [tableStyle]="{ 'min-width': '50rem' }">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Name</th>
+          <th>City</th>
+          <th>Units</th>
+          <th>Action</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-location>
+        <tr>
+          <td>{{ location.name }}</td>
+          <td>{{ location.city }}</td>
+          <td>{{ location.availableUnits }}</td>
+          <td>
+            <button class="primary" (click)="handleLocationClick(location)">Details</button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  } @else {
+    @for (housingLocation of locationsToDisplay(); track housingLocation.id) {
+       <app-card-layout>
+         <app-housing-location
+           [housingLocation]="housingLocation"
+           [mode]="mode()"
+           [isSelected]="housingLocation.selected ?? false"
+           (onLocationClick)="handleLocationClick($event)"
+         />
+       </app-card-layout>
+    }
+  }
+</section> -->
+<!--   
+  <section class="results">
+    @for (housingLocation of locationsToDisplay(); track housingLocation.id) {
+      <app-card-layout>
+        <app-housing-location
+          [housingLocation]="housingLocation"
+          [mode]="mode()"
+          [isSelected]="housingLocation.selected ?? false"
+          (onLocationClick)="handleLocationClick($event)"
+        />
+      </app-card-layout>
+    } @empty {
+      <p>No locations found.</p>
+    }
+  </section>
+</section> -->

@@ -1,9 +1,139 @@
-form{
-    display:flex;
-    flex-direction:column;
-    gap: 10px;
-    width:200px
+/* Container to help center everything on the page */
+:host {
+  display: block;
+  background-color: #f1f5f9;
+  min-height: 100vh;
+  padding: 40px 20px;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
-.error{
-    color:red;
+
+/* The Main Form Box */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  
+  /* BOX CONSTRAINTS */
+  width: 100%;
+  max-width: 550px;       /* Limits the width so it doesn't stretch */
+  margin: 0 auto 30px;    /* Centers the box and adds space at bottom */
+  
+  /* CARD STYLING */
+  background: #ffffff;
+  padding: 32px;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 
+              0 8px 10px -6px rgba(0, 0, 0, 0.05);
+}
+
+/* Typography */
+h2 {
+  margin: 10px 0 0;
+  color: #0f172a;
+  font-size: 1.5rem;
+}
+
+h3 {
+  margin: 20px 0 8px;
+  color: #334155;
+  font-size: 1.1rem;
+  border-bottom: 2px solid #f1f5f9;
+  padding-bottom: 8px;
+}
+
+label {
+  color: #1e293b;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: -4px; /* Brings label closer to its input */
+}
+
+/* Inputs */
+input[type='text'],
+input[type='email'],
+input[type='number'] {
+  width: 100%;
+  box-sizing: border-box; /* Ensures padding doesn't increase width */
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 0.95rem;
+  color: #0f172a;
+  background: #ffffff;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input:focus {
+  outline: none;
+  border-color: #0f766e;
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.1);
+}
+
+/* Address Grouping */
+div[formGroupName="address"] {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  background-color: #f8fafc;
+  border-radius: 12px;
+}
+
+/* Submit Button */
+button[type='submit'] {
+  margin-top: 12px;
+  border: none;
+  border-radius: 10px;
+  padding: 14px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+  background: #0f766e;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+button[type='submit']:hover:not(:disabled) {
+  background: #0d9488;
+}
+
+button[type='submit']:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+button[type='submit']:disabled {
+  background: #94a3b8;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Secondary/Partially Update Button */
+button:not([type='submit']) {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button:not([type='submit']):hover {
+  background: #e2e8f0;
+}
+
+/* Error Messages */
+.error {
+  margin-top: -8px;
+  color: #e11d48;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+/* Helper for the "Entered Value" text */
+p:not(.error) {
+  text-align: center;
+  color: #64748b;
+  font-size: 0.9rem;
 }

@@ -1,20 +1,23 @@
 <form>
-  <label for="name">Name: </label>
+  <label for="name">Standalone Name: </label>
   <input id="name" type="text" [formControl]="name" (change)="handleChange($event)" />
 </form>
-<p>Entered Value ={{ name.value }}</p>
+<p>Entered Value = {{ name.value }}</p>
+<button type="button" (click)="updateName()">Update name</button>
 
-<button (click)="updateName()">Update name</button>
+<hr />
 
 <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+  
   <label for="first-name">First Name:</label>
   @let firstName = profileForm.controls.firstName;
   <input id="first" type="text" formControlName="firstName" />
-  @if (firstName.touched && !firstName.valid) {
-    <p class="error">You must enter a proper name with atleast 6 chars in length</p>
-  }
-  <label for="last-name">Last Name:</label>
+  
+  @if (firstName.touched && firstName.invalid) {
+    <p class="error">You must enter a proper name with at least 6 chars in length</p>
+  } <label for="last-name">Last Name:</label>
   <input id="last" type="text" formControlName="lastName" />
+
   <label for="email">Email:</label>
   <input id="email" type="text" formControlName="email" />
 
@@ -22,12 +25,14 @@
     <h2>Address</h2>
     <label for="street">Street:</label>
     <input id="street" type="text" formControlName="street" />
+
     <label for="city">City:</label>
     <input id="city" type="text" formControlName="city" />
+
     <label for="state">State:</label>
     <input id="state" type="text" formControlName="state" />
   </div>
 
-  <button type="submit" [disabled]="!profileForm.valid">Submit</button>
-  <button (click)="updateName()">Update partially</button>
+  <button type="submit" [disabled]="profileForm.invalid">Submit</button>
+  <button type="button" (click)="updateName()">Update partially</button>
 </form>
